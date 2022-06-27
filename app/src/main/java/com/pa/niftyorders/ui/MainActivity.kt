@@ -22,6 +22,6 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun DefaultPreview() {
     NiftyOrdersTheme() {
-
+        NiftyOrdersScreen()
     }
 }

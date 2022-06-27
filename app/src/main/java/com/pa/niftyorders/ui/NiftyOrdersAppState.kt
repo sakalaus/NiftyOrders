@@ -5,13 +5,16 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.CoroutineScope
+
+enum class NavTree{
+    ShopWindow, Cart, ProductDetail
+}
 
 class NiftyOrdersAppState(
     val scaffoldState: ScaffoldState,
@@ -27,11 +30,9 @@ fun rememberAppState(
     navController: NavHostController = rememberNavController(),
     resources: Resources = resources(),
     coroutineScope: CoroutineScope = rememberCoroutineScope()
-){
-    remember {
+) =
         NiftyOrdersAppState(scaffoldState, navController, resources, coroutineScope)
-    }
-}
+
 
 @Composable
 @ReadOnlyComposable
