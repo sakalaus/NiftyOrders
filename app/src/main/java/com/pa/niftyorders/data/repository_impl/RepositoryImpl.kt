@@ -6,9 +6,9 @@ import com.pa.niftyorders.domain.repository.Repository
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
-    val db: NiftyDataBase
+    private val db: NiftyDataBase
 ): Repository {
-    val dao = db.daoProduct
+    private val dao = db.daoProduct
     override suspend fun getTopProducts(): List<Product> {
         return dao.getAllProducts()
     }
