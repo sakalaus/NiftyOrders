@@ -2,13 +2,14 @@ package com.pa.niftyorders.ui
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.pa.niftyorders.ui.screens.shopwindow.ShopWindowScreen
+import com.pa.niftyorders.ui.screens.shopwindow.ShopWindowRoute
 import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.utils.WindowSizeClass
 
@@ -25,14 +26,27 @@ fun NiftyOrdersScreen(windowSizeClass: WindowSizeClass) {
         val appState = rememberAppState(
             windowSizeClass = windowSizeClass)
 
+        val isExpandedScreen = windowSizeClass == WindowSizeClass.Expanded
+
         Scaffold(
             scaffoldState = appState.scaffoldState
         ) {
             NavHost(
                 navController = appState.navController,
-                startDestination = NavTree.ShopWindow.name){
-                composable(NavTree.ShopWindow.name) { ShopWindowScreen() }
+                startDestination = NiftyDestinations.SHOP_WINDOW){
+                composable(
+                    route = NiftyDestinations.SHOP_WINDOW
+                ) {
+                    ShopWindowRoute(
+                        navController = appState.navController,
+                        isExpandedScreen = isExpandedScreen
+                    )
+                }
             }
         }
     }
+}
+
+object NiftyDestinations {
+    const val SHOP_WINDOW = "shop_window"
 }

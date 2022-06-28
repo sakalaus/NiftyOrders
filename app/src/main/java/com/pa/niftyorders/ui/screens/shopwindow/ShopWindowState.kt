@@ -1,6 +1,6 @@
 package com.pa.niftyorders.ui.screens.shopwindow
 
 data class ShopWindowState(
-    val header: String = ""
+    val isCartOpen: Boolean = false
 ) {
 }

@@ -10,7 +10,9 @@ import com.pa.niftyorders.ui.NiftyOrdersScreen
 import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.utils.WindowSizeClass
 import com.pa.niftyorders.utils.rememberWindowSizeClass
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

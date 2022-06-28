@@ -15,7 +15,7 @@ import com.pa.niftyorders.utils.WindowSizeClass
 import kotlinx.coroutines.CoroutineScope
 
 enum class NavTree{
-    ShopWindow, Cart, ProductDetail
+    ShopWindow
 }
 
 class NiftyOrdersAppState(

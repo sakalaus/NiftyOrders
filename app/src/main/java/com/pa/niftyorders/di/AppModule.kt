@@ -3,6 +3,7 @@ package com.pa.niftyorders.di
 import android.app.Application
 import androidx.room.Room
 import com.pa.niftyorders.data.local.NiftyDataBase
+import com.pa.niftyorders.data.repository_impl.RepositoryImpl
 import com.pa.niftyorders.domain.repository.Repository
 import com.pa.niftyorders.domain.use_cases.GetTopProducts
 import com.pa.niftyorders.domain.use_cases.OrderUseCases
