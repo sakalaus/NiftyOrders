@@ -2,33 +2,39 @@ package com.pa.niftyorders.ui.screens.shopwindow
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
+import com.pa.niftyorders.ui.NiftyOrdersAppState
 
 @Composable
 fun ShopWindowRoute(
-    navController: NavController,
     viewModel: ShopWindowViewModel = hiltViewModel(),
-    isExpandedScreen: Boolean
-){
+    appState: NiftyOrdersAppState,
+    isExpandedScreen: Boolean,
+) {
+
     val uiState = viewModel.uiState
 
-   ShopWindowRoute(
-       uiState = uiState,
-       isExpandedScreen = isExpandedScreen
-   )
+    ShopWindowRoute(
+        uiState = uiState,
+        appState = appState,
+        isExpandedScreen = isExpandedScreen
+    )
 }
 
 @Composable
 private fun ShopWindowRoute(
     uiState: ShopWindowState,
+    appState: NiftyOrdersAppState,
     isExpandedScreen: Boolean
-){
+) {
     val shopWindowScreenType = getScreenType(
         isExpandedScreen = isExpandedScreen,
         uiState = uiState
     )
-    when (shopWindowScreenType){
-        ShopWindowScreenType.ShopWindowScreenWithCart -> ShopWindowScreenWithCartScreen()
+    when (shopWindowScreenType) {
+        ShopWindowScreenType.ShopWindowScreenWithCart -> ShopWindowScreenWithCartScreen(
+            appState = appState,
+            uiState = uiState
+        )
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
         ShopWindowScreenType.CartScreen -> CartScreen()
     }
@@ -40,9 +46,14 @@ private enum class ShopWindowScreenType {
     CartScreen
 }
 
-private fun getScreenType(isExpandedScreen: Boolean, uiState: ShopWindowState): ShopWindowScreenType{
-    return when (isExpandedScreen){
+private fun getScreenType(
+    isExpandedScreen: Boolean,
+    uiState: ShopWindowState
+): ShopWindowScreenType {
+    return when (isExpandedScreen) {
         true -> ShopWindowScreenType.ShopWindowScreenWithCart
-        false -> {if (uiState.isCartOpen) ShopWindowScreenType.CartScreen else ShopWindowScreenType.ShopWindowScreen}
+        false -> {
+            if (uiState.isCartOpen) ShopWindowScreenType.CartScreen else ShopWindowScreenType.ShopWindowScreen
+        }
     }
 }

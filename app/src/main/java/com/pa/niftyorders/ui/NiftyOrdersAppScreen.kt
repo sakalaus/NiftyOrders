@@ -24,24 +24,23 @@ fun NiftyOrdersScreen(windowSizeClass: WindowSizeClass) {
         }
 
         val appState = rememberAppState(
-            windowSizeClass = windowSizeClass)
+            windowSizeClass = windowSizeClass
+        )
 
         val isExpandedScreen = windowSizeClass == WindowSizeClass.Expanded
 
-        Scaffold(
-            scaffoldState = appState.scaffoldState
+
+        NavHost(
+            navController = appState.navController,
+            startDestination = NiftyDestinations.SHOP_WINDOW
         ) {
-            NavHost(
-                navController = appState.navController,
-                startDestination = NiftyDestinations.SHOP_WINDOW){
-                composable(
-                    route = NiftyDestinations.SHOP_WINDOW
-                ) {
-                    ShopWindowRoute(
-                        navController = appState.navController,
-                        isExpandedScreen = isExpandedScreen
-                    )
-                }
+            composable(
+                route = NiftyDestinations.SHOP_WINDOW
+            ) {
+                ShopWindowRoute(
+                    appState = appState,
+                    isExpandedScreen = isExpandedScreen
+                )
             }
         }
     }

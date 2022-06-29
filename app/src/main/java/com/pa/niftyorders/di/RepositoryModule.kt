@@ -1,6 +1,7 @@
 package com.pa.niftyorders.di
 
 import com.pa.niftyorders.data.repository_impl.RepositoryImpl
+import com.pa.niftyorders.data.repository_mock.RepositoryMock
 import com.pa.niftyorders.domain.repository.Repository
 import dagger.Binds
 import dagger.Module
@@ -13,7 +14,7 @@ import javax.inject.Singleton
 abstract class RepositoryModule {
     @Binds
     @Singleton
-    abstract fun bindUserRepository(
-        userRepository: RepositoryImpl
+    abstract fun bindRepository(
+        repository: RepositoryMock
     ): Repository
 }

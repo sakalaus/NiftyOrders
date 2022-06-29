@@ -73,6 +73,9 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
 
+    // Coil for Compose
+    implementation("io.coil-kt:coil-compose:2.1.0")
+
     // Compose System UI colors
     implementation 'com.google.accompanist:accompanist-systemuicontroller:0.24.10-beta'
 
@@ -100,4 +103,5 @@ dependencies {
 
     // Window metrics
     implementation "androidx.window:window:1.0.0"
+
 }
