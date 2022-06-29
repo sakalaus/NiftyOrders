@@ -107,7 +107,9 @@ fun ProductsDisplay(
     modifier: Modifier,
     content: @Composable () -> Unit
 ){
-
+    Surface(
+        modifier = modifier,
+        content = content)
 }
 
 @Composable
