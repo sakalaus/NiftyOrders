@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Nifty Orders</string>
+    <string name="top_products">Top products</string>
+    <string name="recommended_for_you">Recommended for you</string>
 </resources>

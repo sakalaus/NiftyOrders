@@ -1,33 +1,49 @@
 package com.pa.niftyorders.ui.screens.shopwindow
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.ArrowBack
+import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.pa.niftyorders.R
 import com.pa.niftyorders.data.local.entities.Product
 import com.pa.niftyorders.ui.NiftyOrdersAppState
 import com.pa.niftyorders.ui.theme.ThemeElements
+import com.pa.niftyorders.utils.CURRENCY_SIGN
 
 @Composable
-fun ShopWindowScreen(){
+fun ShopWindowScreen() {
     Text("Shop window screen")
 }
 
@@ -35,28 +51,102 @@ fun ShopWindowScreen(){
 fun ShopWindowScreenWithCartScreen(
     uiState: ShopWindowState,
     appState: NiftyOrdersAppState
-){
-    Text("Shop window screen with cart")
-    ProductsDisplay(
-        topProducts = uiState.topProducts
-    )
+) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        NiftySurface(
+            backgroundColor = ThemeElements.colors.secondaryBackgroundColor,
+            elevation = 2.dp,
+            shape = RectangleShape,
+            modifier = Modifier.fillMaxWidth(0.7f)
+        ) {
+            ProductsDisplay(
+                topProducts = uiState.topProducts
+            )
+        }
+        NiftySurface(
+            backgroundColor = Color.Red,
+            elevation = 2.dp,
+            shape = RectangleShape,
+            modifier = Modifier.fillMaxWidth(0.7f)
+        ) {
+            CartScreen()
+        }
+    }
 }
 
 @Composable
-fun CartScreen(){
+fun CartScreen() {
     Text("Cart screen")
 }
 
 @Composable
-fun ProductsDisplay(
-
-    topProducts: List<Product>
+fun ProductSectionHeader(
+    caption: String,
+    modifier: Modifier = Modifier
 ){
-    LazyColumn(modifier = Modifier.fillMaxSize()){
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .heightIn(min = 24.dp, max = 28.dp)
+            .then(Modifier.padding(start = 24.dp, top = 0.dp))
+    ) {
+        Text(
+            text = caption,
+            style = MaterialTheme.typography.h6,
+            color = ThemeElements.colors.primaryTextColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .wrapContentWidth(Alignment.Start)
+        )
+        IconButton(
+            onClick = { /* todo */ },
+            modifier = Modifier.align(Alignment.CenterVertically)
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.ArrowForward,
+                tint = ThemeElements.colors.primaryTintColor,
+                contentDescription = null
+            )
+        }
+    }
+}
+
+@Composable
+fun ProductsDisplay(
+    topProducts: List<Product>
+) {
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 8.dp)
+    ) {
+        item{
+            Spacer(modifier = Modifier.height(24.dp))
+        }
         item {
-            LazyRow(modifier = Modifier.fillMaxWidth()){
-                itemsIndexed(items = topProducts, key = {_, product -> product.id}){ index, product ->
+            ProductSectionHeader(stringResource(R.string.top_products))
+            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                itemsIndexed(
+                    items = topProducts,
+                    key = { _, product -> product.id }) { index, product ->
                     ProductCard(
+                        modifier = Modifier.padding(4.dp),
+                        index = index,
+                        product = product,
+                        onProductClick = {}
+                    )
+                }
+            }
+        }
+        item {
+            ProductSectionHeader(stringResource(R.string.recommended_for_you))
+            LazyRow(modifier = Modifier.fillMaxWidth()) {
+                itemsIndexed(
+                    items = topProducts,
+                    key = { _, product -> product.id }) { index, product ->
+                    ProductCard(
+                        modifier = Modifier.padding(horizontal = 8.dp),
                         index = index,
                         product = product,
                         onProductClick = {}
@@ -67,16 +157,18 @@ fun ProductsDisplay(
     }
 }
 
-@Composable fun ProductImage(
+@Composable
+fun ProductImage(
     imageUrl: String,
     contentDescription: String?,
     modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
     elevation: Dp = 0.dp
 ) {
-    ProductSurface(
-        color = Color.LightGray,
+    NiftySurface(
+        backgroundColor = Color.LightGray,
         elevation = elevation,
-        shape = CircleShape,
+        shape = shape,
         modifier = modifier
     ) {
         AsyncImage(
@@ -91,25 +183,54 @@ fun ProductsDisplay(
     }
 }
 
-@Composable fun ProductFoundation(
+@Composable
+fun ProductFoundation(
     modifier: Modifier = Modifier,
+    shape: Shape = MaterialTheme.shapes.medium,
+    color: Color = ThemeElements.colors.primaryBackgroundColor,
+    contentColor: Color = ThemeElements.colors.primaryTextColor,
+    border: BorderStroke? = null,
+    elevation: Dp = 4.dp,
     content: @Composable () -> Unit
-){
-    Surface(
+) {
+    NiftySurface(
         modifier = modifier,
-        content = content)
+        shape = shape,
+        backgroundColor = color,
+        contentColor = contentColor,
+        elevation = elevation,
+        border = border,
+        cornerSize = 8.dp,
+        content = content
+    )
 }
 
-@Composable fun ProductSurface(
-    color: Color,
+
+@Composable
+fun NiftySurface(
+    backgroundColor: Color,
     elevation: Dp,
     shape: Shape,
+    contentColor: Color = ThemeElements.colors.secondaryTintColor,
+    border: BorderStroke? = null,
+    cornerSize: Dp = 0.dp,
     modifier: Modifier,
     content: @Composable () -> Unit
-){
-    Surface(
-        modifier = modifier,
-        content = content)
+) {
+    Box(
+        modifier = modifier
+            .shadow(elevation = elevation, shape = shape, clip = false)
+            .zIndex(elevation.value)
+            .clip(RoundedCornerShape(cornerSize))
+            .then(if (border != null) Modifier.border(border, shape) else Modifier)
+            .background(
+                color = backgroundColor,
+                shape = shape
+            )
+            .clip(shape)
+    ) {
+        CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
+    }
 }
 
 @Composable
@@ -122,8 +243,8 @@ private fun ProductCard(
     ProductFoundation(
         modifier = modifier
             .size(
-                width = 170.dp,
-                height = 250.dp
+                width = 120.dp,
+                height = 170.dp
             )
             .padding(bottom = 16.dp)
     ) {
@@ -134,17 +255,10 @@ private fun ProductCard(
         ) {
             Box(
                 modifier = Modifier
-                    .height(160.dp)
+                    .height(90.dp)
                     .fillMaxWidth()
+                    .padding(4.dp)
             ) {
-                val gradientOffset = 0.4f
-                val gradient = 0f
-                val gradientWidth = 0f
-                Box(
-                    modifier = Modifier
-                        .height(100.dp)
-                        .fillMaxWidth()
-                )
                 ProductImage(
                     imageUrl = product.imageUrl,
                     contentDescription = null,
@@ -153,23 +267,31 @@ private fun ProductCard(
                         .align(Alignment.BottomCenter)
                 )
             }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = product.name,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.h6,
-                color = ThemeElements.colors.secondaryTintColor,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = product.description,
-                style = MaterialTheme.typography.body1,
-                color = ThemeElements.colors.hintColor,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                text = product.name,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(
+                    color = ThemeElements.colors.primaryTextColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = "$CURRENCY_SIGN ${product.price}",
+                maxLines = 1,
+                style = TextStyle(
+                    color = ThemeElements.colors.accentColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(horizontal = 4.dp)
             )
         }
     }
 }
+
 
