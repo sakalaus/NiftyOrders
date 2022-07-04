@@ -5,17 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -23,6 +20,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -41,6 +39,8 @@ import com.pa.niftyorders.data.local.entities.Product
 import com.pa.niftyorders.ui.NiftyOrdersAppState
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun ShopWindowScreen() {
@@ -50,6 +50,7 @@ fun ShopWindowScreen() {
 @Composable
 fun ShopWindowScreenWithCartScreen(
     uiState: ShopWindowState,
+    doScroll: (LazyListState, CoroutineScope) -> Unit,
     appState: NiftyOrdersAppState
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
@@ -60,14 +61,16 @@ fun ShopWindowScreenWithCartScreen(
             modifier = Modifier.fillMaxWidth(0.7f)
         ) {
             ProductsDisplay(
-                topProducts = uiState.topProducts
+                topProducts = uiState.topProducts,
+                doScroll = doScroll
             )
         }
+        Spacer(modifier = Modifier.width(8.dp))
         NiftySurface(
-            backgroundColor = Color.Red,
+            backgroundColor = ThemeElements.colors.secondaryBackgroundColor,
             elevation = 2.dp,
             shape = RectangleShape,
-            modifier = Modifier.fillMaxWidth(0.7f)
+            modifier = Modifier.fillMaxWidth()
         ) {
             CartScreen()
         }
@@ -76,14 +79,21 @@ fun ShopWindowScreenWithCartScreen(
 
 @Composable
 fun CartScreen() {
-    Text("Cart screen")
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text("Cart goes here")
+    }
 }
 
 @Composable
 fun ProductSectionHeader(
     caption: String,
+    doScroll: () -> Unit,
+    arrowIcon: ImageVector,
     modifier: Modifier = Modifier
-){
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -101,11 +111,13 @@ fun ProductSectionHeader(
                 .wrapContentWidth(Alignment.Start)
         )
         IconButton(
-            onClick = { /* todo */ },
+            onClick = {
+                doScroll()
+            },
             modifier = Modifier.align(Alignment.CenterVertically)
         ) {
             Icon(
-                imageVector = Icons.Outlined.ArrowForward,
+                imageVector = arrowIcon,
                 tint = ThemeElements.colors.primaryTintColor,
                 contentDescription = null
             )
@@ -115,38 +127,40 @@ fun ProductSectionHeader(
 
 @Composable
 fun ProductsDisplay(
-    topProducts: List<Product>
+    topProducts: List<Product>,
+    doScroll: (LazyListState, CoroutineScope) -> Unit
 ) {
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 8.dp)
+    val topProductsLazyRowState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    val arrowIcon by remember(topProductsLazyRowState.firstVisibleItemIndex) {
+        derivedStateOf {
+            if (topProductsLazyRowState.firstVisibleItemIndex==0) Icons.Outlined.ArrowForward else Icons.Outlined.ArrowBack
+        }
+    }
+
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 8.dp)
     ) {
-        item{
+        item {
             Spacer(modifier = Modifier.height(24.dp))
         }
         item {
-            ProductSectionHeader(stringResource(R.string.top_products))
-            LazyRow(modifier = Modifier.fillMaxWidth()) {
+            ProductSectionHeader(
+                caption = stringResource(R.string.top_products),
+                doScroll = { doScroll(topProductsLazyRowState, scope) },
+                arrowIcon = arrowIcon,
+            )
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                state = topProductsLazyRowState
+            ) {
                 itemsIndexed(
                     items = topProducts,
                     key = { _, product -> product.id }) { index, product ->
                     ProductCard(
                         modifier = Modifier.padding(4.dp),
-                        index = index,
-                        product = product,
-                        onProductClick = {}
-                    )
-                }
-            }
-        }
-        item {
-            ProductSectionHeader(stringResource(R.string.recommended_for_you))
-            LazyRow(modifier = Modifier.fillMaxWidth()) {
-                itemsIndexed(
-                    items = topProducts,
-                    key = { _, product -> product.id }) { index, product ->
-                    ProductCard(
-                        modifier = Modifier.padding(horizontal = 8.dp),
                         index = index,
                         product = product,
                         onProductClick = {}
@@ -204,7 +218,6 @@ fun ProductFoundation(
         content = content
     )
 }
-
 
 @Composable
 fun NiftySurface(

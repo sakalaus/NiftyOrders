@@ -16,7 +16,7 @@ val sampleProducts = listOf(
         name = "Adgeeka hot as the devil's toe",
         description = "Straight out of Colombia",
         price = 200.99,
-        imageUrl = "https://www.chefmarket.ru/blog/wp-content/uploads/2018/05/3_1522162464_3dc93.jpg"
+        imageUrl = "https://cdn.w600.comps.canstockphoto.com/round-knolling-composition-of-various-pictures_csp87075789.jpg"
     ),
     Product(
         id = 2,
@@ -30,14 +30,14 @@ val sampleProducts = listOf(
         name = "Paella de mariscos valenciana",
         description = "De mariscos de la zona",
         price = 299.99,
-        imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/f3d7d1b4-4df6-4d72-b2f0-acf05cccae08/Derivates/4513fa48-f03c-4f8e-bea0-18385dd4bdd0.jpg"
+        imageUrl = "https://www.myfooddata.com/images/creative/splash.png"
     ),
     Product(
         id = 4,
         name = "Adgeeka hot as the devil's toe",
         description = "Straight out of Colombia",
         price = 200.99,
-        imageUrl = "https://www.chefmarket.ru/blog/wp-content/uploads/2018/05/3_1522162464_3dc93.jpg"
+        imageUrl = "https://cdn.w600.comps.canstockphoto.com/round-knolling-composition-of-various-pictures_csp87075789.jpg"
     ),
     Product(
         id = 5,
@@ -51,7 +51,7 @@ val sampleProducts = listOf(
         name = "Paella de mariscos valenciana",
         description = "De mariscos de la zona",
         price = 299.99,
-        imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/f3d7d1b4-4df6-4d72-b2f0-acf05cccae08/Derivates/4513fa48-f03c-4f8e-bea0-18385dd4bdd0.jpg"
+        imageUrl = "https://www.myfooddata.com/images/creative/splash.png"
     ),
     Product(
         id = 7,

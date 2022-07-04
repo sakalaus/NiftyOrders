@@ -1,8 +1,10 @@
 package com.pa.niftyorders.ui.screens.shopwindow
 
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pa.niftyorders.ui.NiftyOrdersAppState
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun ShopWindowRoute(
@@ -16,6 +18,7 @@ fun ShopWindowRoute(
     ShopWindowRoute(
         uiState = uiState,
         appState = appState,
+        doScroll = viewModel.doScroll,
         isExpandedScreen = isExpandedScreen
     )
 }
@@ -24,6 +27,7 @@ fun ShopWindowRoute(
 private fun ShopWindowRoute(
     uiState: ShopWindowState,
     appState: NiftyOrdersAppState,
+    doScroll: (LazyListState, CoroutineScope) -> Unit,
     isExpandedScreen: Boolean
 ) {
     val shopWindowScreenType = getScreenType(
@@ -33,6 +37,7 @@ private fun ShopWindowRoute(
     when (shopWindowScreenType) {
         ShopWindowScreenType.ShopWindowScreenWithCart -> ShopWindowScreenWithCartScreen(
             appState = appState,
+            doScroll = doScroll,
             uiState = uiState
         )
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
