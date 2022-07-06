@@ -72,19 +72,88 @@ fun ShopWindowScreenWithCartScreen(
             shape = RectangleShape,
             modifier = Modifier.fillMaxWidth()
         ) {
-            CartScreen()
+            CartScreen(
+                productsInCart = uiState.productsInCart
+            )
         }
     }
 }
 
 @Composable
-fun CartScreen() {
+fun CartScreen(productsInCart: List<OrderLine>) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
-        Text("Cart goes here")
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            CartHeader(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.1f)
+            )
+            CartItems(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.7f), productsInCart = productsInCart
+            )
+            CartFooter(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(1f)
+            )
+        }
     }
+}
+
+@Composable
+fun CartItems(
+    productsInCart: List<OrderLine>,
+    modifier: Modifier = Modifier
+) {
+    NiftySurface(
+        backgroundColor = ThemeElements.colors.primaryBackgroundColor,
+        elevation = 2.dp,
+        shape = RectangleShape,
+        modifier = modifier
+    ) {
+        LazyColumn() {
+            items(productsInCart) { orderLine ->
+                ProductInCart(orderLine)
+            }
+        }
+    }
+
+}
+
+@Composable
+fun CartHeader(modifier: Modifier = Modifier) {
+    NiftySurface(
+        backgroundColor = ThemeElements.colors.primaryBackgroundColor,
+        elevation = 4.dp,
+        shape = RectangleShape,
+        modifier = modifier
+    ) {
+    }
+}
+
+@Composable
+fun CartFooter(modifier: Modifier = Modifier) {
+    NiftySurface(
+        backgroundColor = ThemeElements.colors.primaryBackgroundColor,
+        elevation = 4.dp,
+        shape = RectangleShape,
+        modifier = modifier
+    ) {
+    }
+}
+
+@Composable
+fun ProductInCart(orderLine: OrderLine) {
+    Text(text = orderLine.product.name)
 }
 
 @Composable
@@ -134,7 +203,7 @@ fun ProductsDisplay(
     val scope = rememberCoroutineScope()
     val arrowIcon by remember(topProductsLazyRowState.firstVisibleItemIndex) {
         derivedStateOf {
-            if (topProductsLazyRowState.firstVisibleItemIndex==0) Icons.Outlined.ArrowForward else Icons.Outlined.ArrowBack
+            if (topProductsLazyRowState.firstVisibleItemIndex == 0) Icons.Outlined.ArrowForward else Icons.Outlined.ArrowBack
         }
     }
 

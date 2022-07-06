@@ -41,7 +41,7 @@ private fun ShopWindowRoute(
             uiState = uiState
         )
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
-        ShopWindowScreenType.CartScreen -> CartScreen()
+        ShopWindowScreenType.CartScreen -> CartScreen(productsInCart = uiState.productsInCart)
     }
 }
 
