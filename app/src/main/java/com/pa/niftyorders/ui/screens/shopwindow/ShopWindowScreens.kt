@@ -14,6 +14,9 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -26,21 +29,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.room.Index.Order
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.R
 import com.pa.niftyorders.data.local.entities.Product
+import com.pa.niftyorders.data.repository_mock.RepositoryMock
+import com.pa.niftyorders.data.repository_mock.sampleCart
 import com.pa.niftyorders.ui.NiftyOrdersAppState
+import com.pa.niftyorders.ui.NiftyOrdersScreen
+import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
+import com.pa.niftyorders.utils.WindowSizeClass
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun ShopWindowScreen() {
@@ -83,17 +96,16 @@ fun ShopWindowScreenWithCartScreen(
 fun CartScreen(productsInCart: List<OrderLine>) {
     Box(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Center,
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            horizontalAlignment = Alignment.Start
         ) {
             CartHeader(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.1f)
+                    .fillMaxHeight(0.08f)
             )
             CartItems(
                 modifier = Modifier
@@ -116,18 +128,130 @@ fun CartItems(
 ) {
     NiftySurface(
         backgroundColor = ThemeElements.colors.primaryBackgroundColor,
-        elevation = 2.dp,
+        elevation = 4.dp,
         shape = RectangleShape,
         modifier = modifier
     ) {
         LazyColumn() {
-            items(productsInCart) { orderLine ->
-                ProductInCart(orderLine)
+            itemsIndexed(
+                items = productsInCart,
+                key = { _, orderLine -> orderLine.product.id })
+            { index: Int, orderLine: OrderLine ->
+                CartRow(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    index = index,
+                    orderLine = orderLine,
+                    onProductClick = {},
+                    onQuantityDecrease = {},
+                    onQuantityIncrease = {}
+                )
             }
         }
     }
-
 }
+
+@Composable
+fun CartRow(
+    modifier: Modifier = Modifier,
+    orderLine: OrderLine,
+    index: Int,
+    onProductClick: (Product) -> Unit,
+    onQuantityIncrease: (OrderLine) -> Unit,
+    onQuantityDecrease: (OrderLine) -> Unit,
+) {
+    Box(modifier = Modifier.then(Modifier.padding(vertical = 4.dp))) {
+        Row(modifier = modifier.fillMaxSize()) {
+            Column(verticalArrangement = Arrangement.Center) {
+                ProductImage(
+                    imageUrl = orderLine.product.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(60.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Column() {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.6f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier.fillMaxSize(),
+                        text = orderLine.product.name,
+                        color = ThemeElements.colors.primaryTextColor,
+                        style = TextStyle(
+                            color = ThemeElements.colors.primaryTextColor,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(),
+                    verticalAlignment = Alignment.Bottom
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth(0.5f)
+                            .fillMaxHeight()
+                    ) {
+                        Text(
+                            text = "$CURRENCY_SIGN ${orderLine.totalPrice}",
+                            color = ThemeElements.colors.accentColor,
+                            style = TextStyle(
+                                color = ThemeElements.colors.accentColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            ),
+                            maxLines = 1,
+                            overflow = TextOverflow.Visible
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight()
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxSize(),
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            ArithmeticBox(
+                                modifier = Modifier.size(24.dp),
+                                text = "+",
+                                onKeyPress = {})
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                text = orderLine.quantity.toInt().toString(),
+                                style = TextStyle(
+                                    color = ThemeElements.colors.secondaryTextColor,
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            ArithmeticBox(
+                                modifier = Modifier.size(24.dp),
+                                text = "-",
+                                onKeyPress = {})
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+}
+
 
 @Composable
 fun CartHeader(modifier: Modifier = Modifier) {
@@ -137,6 +261,14 @@ fun CartHeader(modifier: Modifier = Modifier) {
         shape = RectangleShape,
         modifier = modifier
     ) {
+        Text(
+            modifier = Modifier.padding(start = 20.dp, top = 24.dp),
+            text = stringResource(R.string.your_cart),
+            style = MaterialTheme.typography.h6,
+            color = ThemeElements.colors.primaryTextColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
@@ -151,10 +283,6 @@ fun CartFooter(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun ProductInCart(orderLine: OrderLine) {
-    Text(text = orderLine.product.name)
-}
 
 @Composable
 fun ProductSectionHeader(
@@ -294,6 +422,7 @@ fun NiftySurface(
     elevation: Dp,
     shape: Shape,
     contentColor: Color = ThemeElements.colors.secondaryTintColor,
+    contentAlignment: Alignment = Alignment.TopStart,
     border: BorderStroke? = null,
     cornerSize: Dp = 0.dp,
     modifier: Modifier,
@@ -308,8 +437,8 @@ fun NiftySurface(
             .background(
                 color = backgroundColor,
                 shape = shape
-            )
-            .clip(shape)
+            ),
+        contentAlignment = contentAlignment
     ) {
         CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
     }
@@ -374,6 +503,75 @@ private fun ProductCard(
             )
         }
     }
+}
+
+@Composable
+fun ArithmeticBox(
+    modifier: Modifier,
+    text: String,
+    onKeyPress: () -> Unit
+) {
+    NiftySurface(
+        modifier = modifier,
+        backgroundColor = ThemeElements.colors.accentColor,
+        contentColor = ThemeElements.colors.primaryBackgroundColor,
+        contentAlignment = Center,
+        elevation = 4.dp,
+        shape = RectangleShape,
+        cornerSize = 4.dp
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                textAlign = TextAlign.Center,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+    }
+}
+
+@Preview(
+    name = "default",
+    backgroundColor = 0xFFFFF,
+    showBackground = true,
+    heightDp = 24,
+    widthDp = 24,
+    device = Devices.NEXUS_9
+)
+@Composable
+private fun ArithmeticBoxPreview() {
+    NiftyOrdersTheme() {
+        ArithmeticBox(
+            modifier = Modifier
+                .size(16.dp)
+                .clickable(onClick = {}),
+            text = "+",
+            onKeyPress = {}
+        )
+    }
+}
+
+@Preview(
+    name = "default",
+    backgroundColor = 0xFFFFF,
+    showBackground = true,
+    heightDp = 60,
+    widthDp = 360,
+    device = Devices.NEXUS_9
+)
+@Composable
+private fun CartRowPreview() {
+    NiftyOrdersTheme() {
+        CartRow(
+            orderLine = sampleCart[0],
+            index = 1,
+            onProductClick = {},
+            onQuantityIncrease = {},
+            onQuantityDecrease = {}
+        )
+    }
+
 }
 
 

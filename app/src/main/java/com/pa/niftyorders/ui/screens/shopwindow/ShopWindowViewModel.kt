@@ -23,6 +23,10 @@ class ShopWindowViewModel @Inject constructor(
             val topProducts = orderUseCases.getTopProducts()
             uiState = uiState.copy(topProducts = topProducts)
         }
+        viewModelScope.launch {
+            val productsInCart = orderUseCases.getProductsInCart()
+            uiState = uiState.copy(productsInCart = productsInCart)
+        }
     }
 
     val doScroll: (

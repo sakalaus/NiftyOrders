@@ -2,18 +2,24 @@ package com.pa.niftyorders.data.repository_mock
 
 import com.pa.niftyorders.data.local.entities.Product
 import com.pa.niftyorders.domain.repository.Repository
+import com.pa.niftyorders.ui.screens.shopwindow.OrderLine
 import javax.inject.Inject
 
 class RepositoryMock @Inject constructor() : Repository {
     override suspend fun getTopProducts(): List<Product> {
         return sampleProducts
     }
+
+    override suspend fun getProductsInCart(): List<OrderLine> {
+        return sampleCart
+    }
 }
+
 
 val sampleProducts = listOf(
     Product(
         id = 1,
-        name = "Adgeeka hot as the devil's toe",
+        name = "Adgeeka hot as the devil's toe, are you friend or foe",
         description = "Straight out of Colombia",
         price = 200.99,
         imageUrl = "https://cdn.w600.comps.canstockphoto.com/round-knolling-composition-of-various-pictures_csp87075789.jpg"
@@ -75,3 +81,13 @@ val sampleProducts = listOf(
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/f3d7d1b4-4df6-4d72-b2f0-acf05cccae08/Derivates/4513fa48-f03c-4f8e-bea0-18385dd4bdd0.jpg"
     )
 )
+
+
+val sampleCart = sampleProducts.take(7).mapIndexed() { index, item ->
+    OrderLine(
+        product = item,
+        quantity = (index+1).toFloat(),
+        price = (sampleProducts[0].price).toBigDecimal(),
+        totalPrice = (sampleProducts[0].price * (index+1)).toBigDecimal(),
+    )
+}
