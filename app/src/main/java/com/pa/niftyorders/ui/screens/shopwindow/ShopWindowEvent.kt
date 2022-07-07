@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 sealed class ShopWindowEvent() {
     data class ProductRowScroll(val lazyListState: LazyListState, val coroutineScope: CoroutineScope): ShopWindowEvent()
     data class  CartProductSelection(val productId: Long): ShopWindowEvent()
-    data class  CartQuantityDecrease(val productId: Long): ShopWindowEvent()
-    data class  CartQuantityIncrease(val productId: Long): ShopWindowEvent()
-
+    data class  CartQuantityIncrease(val cartLineId: Long): ShopWindowEvent()
+    data class  CartQuantityDecrease(val cartLineId: Long): ShopWindowEvent()
+    object DemoDataCreation: ShopWindowEvent()
 }

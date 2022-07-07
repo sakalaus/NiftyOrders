@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -15,8 +14,6 @@ import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
-import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -35,25 +32,19 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import androidx.room.Index.Order
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.R
-import com.pa.niftyorders.data.local.entities.Product
-import com.pa.niftyorders.data.repository_mock.RepositoryMock
+import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.data.repository_mock.sampleCart
+import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.ui.NiftyOrdersAppState
-import com.pa.niftyorders.ui.NiftyOrdersScreen
 import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
-import com.pa.niftyorders.utils.WindowSizeClass
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.JdkConstants.HorizontalAlignment
 
 @Composable
 fun ShopWindowScreen() {
@@ -100,7 +91,7 @@ fun ShopWindowScreenWithCartScreen(
 
 @Composable
 fun CartScreen(
-    productsInCart: List<OrderLine>,
+    productsInCart: List<CartLine>,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long) -> Unit,
     onQuantityDecrease: (Long) -> Unit
@@ -137,7 +128,7 @@ fun CartScreen(
 
 @Composable
 fun CartItems(
-    productsInCart: List<OrderLine>,
+    productsInCart: List<CartLine>,
     modifier: Modifier = Modifier,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long) -> Unit,
@@ -152,15 +143,15 @@ fun CartItems(
         LazyColumn() {
             itemsIndexed(
                 items = productsInCart,
-                key = { _, orderLine -> orderLine.product.id })
-            { index: Int, orderLine: OrderLine ->
+                key = { _, orderLine -> orderLine.productId })
+            { index: Int, cartLine: CartLine ->
                 CartRow(
                     modifier = Modifier
                         .padding(4.dp)
                         .fillMaxWidth()
                         .height(60.dp),
                     index = index,
-                    orderLine = orderLine,
+                    cartLine = cartLine,
                     onProductClick = onProductClick,
                     onQuantityDecrease = onQuantityDecrease,
                     onQuantityIncrease = onQuantityIncrease
@@ -173,7 +164,7 @@ fun CartItems(
 @Composable
 fun CartRow(
     modifier: Modifier = Modifier,
-    orderLine: OrderLine,
+    cartLine: CartLine,
     index: Int,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long) -> Unit,
@@ -183,7 +174,7 @@ fun CartRow(
         Row(modifier = modifier.fillMaxSize()) {
             Column(verticalArrangement = Arrangement.Center) {
                 ProductImage(
-                    imageUrl = orderLine.product.imageUrl,
+                    imageUrl = cartLine.imageUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .size(60.dp)
@@ -199,7 +190,7 @@ fun CartRow(
                 ) {
                     Text(
                         modifier = Modifier.fillMaxSize(),
-                        text = orderLine.product.name,
+                        text = cartLine.name,
                         color = ThemeElements.colors.primaryTextColor,
                         style = TextStyle(
                             color = ThemeElements.colors.primaryTextColor,
@@ -222,7 +213,7 @@ fun CartRow(
                             .fillMaxHeight()
                     ) {
                         Text(
-                            text = "$CURRENCY_SIGN ${orderLine.totalPrice}",
+                            text = "$CURRENCY_SIGN ${cartLine.totalPrice.toFloat()}",
                             color = ThemeElements.colors.accentColor,
                             style = TextStyle(
                                 color = ThemeElements.colors.accentColor,
@@ -244,11 +235,13 @@ fun CartRow(
                         ) {
                             ArithmeticBox(
                                 modifier = Modifier.size(20.dp),
+                                id = cartLine.id,
                                 text = "+",
-                                onKeyPress = {})
+                                onKeyPress = onQuantityIncrease
+                            )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
-                                text = orderLine.quantity.toInt().toString(),
+                                text = cartLine.quantity.toInt().toString(),
                                 style = TextStyle(
                                     color = ThemeElements.colors.secondaryTextColor,
                                     fontSize = 14.sp,
@@ -258,11 +251,12 @@ fun CartRow(
                             Spacer(modifier = Modifier.width(12.dp))
                             ArithmeticBox(
                                 modifier = Modifier.size(20.dp),
+                                id = cartLine.id,
                                 text = "-",
-                                onKeyPress = {})
+                                onKeyPress = onQuantityDecrease
+                            )
                         }
                     }
-
                 }
             }
         }
@@ -509,7 +503,7 @@ private fun ProductCard(
             )
             Spacer(modifier = Modifier.height(2.dp))
             Text(
-                text = "$CURRENCY_SIGN ${product.price}",
+                text = "$CURRENCY_SIGN ${product.price.toFloat()}",
                 maxLines = 1,
                 style = TextStyle(
                     color = ThemeElements.colors.accentColor,
@@ -526,10 +520,11 @@ private fun ProductCard(
 fun ArithmeticBox(
     modifier: Modifier,
     text: String,
-    onKeyPress: () -> Unit
+    id: Long,
+    onKeyPress: (Long) -> Unit
 ) {
     NiftySurface(
-        modifier = modifier,
+        modifier = modifier.then(Modifier.clickable { onKeyPress(id) }),
         backgroundColor = ThemeElements.colors.accentColor,
         contentColor = ThemeElements.colors.primaryBackgroundColor,
         contentAlignment = Center,
@@ -563,6 +558,7 @@ private fun ArithmeticBoxPreview() {
             modifier = Modifier
                 .size(16.dp)
                 .clickable(onClick = {}),
+            id = 1,
             text = "+",
             onKeyPress = {}
         )
@@ -581,7 +577,7 @@ private fun ArithmeticBoxPreview() {
 private fun CartRowPreview() {
     NiftyOrdersTheme() {
         CartRow(
-            orderLine = sampleCart[0],
+            cartLine = sampleCart[0],
             index = 1,
             onProductClick = {},
             onQuantityIncrease = {},

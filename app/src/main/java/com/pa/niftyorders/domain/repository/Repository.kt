@@ -1,9 +1,10 @@
 package com.pa.niftyorders.domain.repository
 
-import com.pa.niftyorders.data.local.entities.Product
-import com.pa.niftyorders.ui.screens.shopwindow.OrderLine
+import com.pa.niftyorders.domain.model.entities.CartLine
+import com.pa.niftyorders.domain.model.entities.Product
 
 interface Repository {
     suspend fun getTopProducts(): List<Product>
-    suspend fun getProductsInCart(): List<OrderLine>
+    suspend fun getProductsInCart(): List<CartLine>
+    suspend fun createDemoData(): Unit
 }

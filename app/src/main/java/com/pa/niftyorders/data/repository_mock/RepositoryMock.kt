@@ -1,8 +1,9 @@
 package com.pa.niftyorders.data.repository_mock
 
-import com.pa.niftyorders.data.local.entities.Product
+import com.pa.niftyorders.domain.model.entities.CartLine
+import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.domain.repository.Repository
-import com.pa.niftyorders.ui.screens.shopwindow.OrderLine
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class RepositoryMock @Inject constructor() : Repository {
@@ -10,84 +11,91 @@ class RepositoryMock @Inject constructor() : Repository {
         return sampleProducts
     }
 
-    override suspend fun getProductsInCart(): List<OrderLine> {
+    override suspend fun getProductsInCart(): List<CartLine> {
         return sampleCart
     }
-}
 
+    override suspend fun createDemoData() {
+        return
+    }
+
+}
 
 val sampleProducts = listOf(
     Product(
         id = 1,
         name = "Adgeeka hot as the devil's toe, are you friend or foe",
         description = "Straight out of Colombia",
-        price = 200.99,
+        price = BigDecimal(200.99),
         imageUrl = "https://cdn.w600.comps.canstockphoto.com/round-knolling-composition-of-various-pictures_csp87075789.jpg"
     ),
     Product(
         id = 2,
         name = "Mojito with a touch of rum",
         description = "Freshed out",
-        price = 99.99,
+        price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/3279978A-FC6C-4231-A42C-DF759994C99C/Derivates/4278FB29-8E6B-4986-BF60-231C91231A01.jpg"
     ),
     Product(
         id = 3,
         name = "Paella de mariscos valenciana",
         description = "De mariscos de la zona",
-        price = 299.99,
+        price = BigDecimal(299.99),
         imageUrl = "https://www.myfooddata.com/images/creative/splash.png"
     ),
     Product(
         id = 4,
         name = "Adgeeka hot as the devil's toe",
         description = "Straight out of Colombia",
-        price = 200.99,
+        price = BigDecimal(200.99),
         imageUrl = "https://cdn.w600.comps.canstockphoto.com/round-knolling-composition-of-various-pictures_csp87075789.jpg"
     ),
     Product(
         id = 5,
         name = "Mojito with a touch of rum",
         description = "Freshed out",
-        price = 99.99,
+        price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/3279978A-FC6C-4231-A42C-DF759994C99C/Derivates/4278FB29-8E6B-4986-BF60-231C91231A01.jpg"
     ),
     Product(
         id = 6,
         name = "Paella de mariscos valenciana",
         description = "De mariscos de la zona",
-        price = 299.99,
+        price = BigDecimal(99.99),
         imageUrl = "https://www.myfooddata.com/images/creative/splash.png"
     ),
     Product(
         id = 7,
         name = "Adgeeka hot as the devil's toe",
         description = "Straight out of Colombia",
-        price = 200.99,
+        price = BigDecimal(99.99),
         imageUrl = "https://www.chefmarket.ru/blog/wp-content/uploads/2018/05/3_1522162464_3dc93.jpg"
     ),
     Product(
         id = 8,
         name = "Mojito with a touch of rum",
         description = "Freshed out",
-        price = 99.99,
+        price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/3279978A-FC6C-4231-A42C-DF759994C99C/Derivates/4278FB29-8E6B-4986-BF60-231C91231A01.jpg"
     ),
     Product(
         id = 9,
         name = "Paella de mariscos valenciana",
         description = "De mariscos de la zona",
-        price = 299.99,
+        price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/f3d7d1b4-4df6-4d72-b2f0-acf05cccae08/Derivates/4513fa48-f03c-4f8e-bea0-18385dd4bdd0.jpg"
     )
 )
 
 
 val sampleCart = sampleProducts.take(7).mapIndexed() { index, item ->
-    OrderLine(
-        product = item,
+    CartLine(
+        id = index.toLong(),
+        productId = item.id,
+        name = item.name,
+        imageUrl = item.imageUrl,
         quantity = (index+1).toFloat(),
-        price = (sampleProducts[0].price).toBigDecimal(),
-        totalPrice = (sampleProducts[0].price * (index+1)).toBigDecimal(),
-    )
+        price = item.price,
+        totalPrice = item.price * (index.toBigDecimal()+BigDecimal(1)),
+        )
 }

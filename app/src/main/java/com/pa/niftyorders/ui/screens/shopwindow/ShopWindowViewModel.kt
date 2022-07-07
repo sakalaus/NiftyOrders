@@ -16,7 +16,9 @@ import javax.inject.Inject
 class ShopWindowViewModel @Inject constructor(
     private val orderUseCases: OrderUseCases
 ) : ViewModel() {
+
     var uiState by mutableStateOf(ShopWindowState())
+        private set
 
     init {
         viewModelScope.launch {
@@ -29,16 +31,32 @@ class ShopWindowViewModel @Inject constructor(
         }
     }
 
-    fun onEvent(event: ShopWindowEvent){
-        when (event){
-            is ShopWindowEvent.ProductRowScroll -> doScroll(event.lazyListState, event.coroutineScope)
+    fun onEvent(event: ShopWindowEvent) {
+        when (event) {
+            is ShopWindowEvent.ProductRowScroll -> doScroll(
+                event.lazyListState,
+                event.coroutineScope
+            )
             is ShopWindowEvent.CartProductSelection -> TODO()
-            is ShopWindowEvent.CartQuantityDecrease -> TODO()
-            is ShopWindowEvent.CartQuantityIncrease -> TODO()
+            is ShopWindowEvent.CartQuantityIncrease -> changeQuantityInCart(
+                cartLineId = event.cartLineId,
+                changeBy = 1
+            )
+            is ShopWindowEvent.CartQuantityDecrease -> changeQuantityInCart(
+                cartLineId = event.cartLineId,
+                changeBy = -1
+            )
+            ShopWindowEvent.DemoDataCreation -> createDemoData()
         }
     }
 
-    val doScroll: (
+    private fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {
+        viewModelScope.launch {
+            orderUseCases.changeQuantityInCart()
+        }
+    }
+
+    private val doScroll: (
         lazyListState: LazyListState,
         scope: CoroutineScope
     ) -> Unit = { state, scope ->
@@ -47,6 +65,10 @@ class ShopWindowViewModel @Inject constructor(
                 if (state.firstVisibleItemIndex == 0) state.layoutInfo.totalItemsCount - 1 else 0
             )
         }
+    }
+
+    private fun createDemoData() {
+        viewModelScope.launch { orderUseCases.createDemoData() }
     }
 
 }
