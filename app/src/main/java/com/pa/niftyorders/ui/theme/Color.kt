@@ -23,9 +23,9 @@ val lightPalette = Colors(
     primaryTextColor = Color(0xFF311F09),
     secondaryTextColor = Color(0xFF5D5F61),
     primaryTextInvertColor = Color(0xFFFFFFFF),
-    primaryTintColor = Color(0xFFFF8A00),
+    primaryTintColor = Color(0xFFF46803),
     secondaryTintColor = Color(0xFF3FA72F),
     hintColor = Color(0xFFA0978C),
-    accentColor = Color(0xFFFF8000),
+    accentColor = Color(0xFFF46803),
     notificationColor = Color.Red
 )

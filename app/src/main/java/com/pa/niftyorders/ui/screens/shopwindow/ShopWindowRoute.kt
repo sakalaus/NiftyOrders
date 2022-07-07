@@ -10,16 +10,45 @@ import kotlinx.coroutines.CoroutineScope
 fun ShopWindowRoute(
     viewModel: ShopWindowViewModel = hiltViewModel(),
     appState: NiftyOrdersAppState,
-    isExpandedScreen: Boolean,
+    isExpandedScreen: Boolean
 ) {
 
     val uiState = viewModel.uiState
 
+
     ShopWindowRoute(
         uiState = uiState,
         appState = appState,
-        doScroll = viewModel.doScroll,
-        isExpandedScreen = isExpandedScreen
+        isExpandedScreen = isExpandedScreen,
+        doScroll = { lazyListState, coroutineScope ->
+            viewModel.onEvent(
+                ShopWindowEvent.ProductRowScroll(
+                    lazyListState = lazyListState,
+                    coroutineScope = coroutineScope
+                )
+            )
+        },
+        onProductClick = { productId ->
+            viewModel.onEvent(
+                ShopWindowEvent.CartProductSelection(
+                    productId = productId
+                )
+            )
+        },
+        onQuantityIncrease = { productId ->
+            viewModel.onEvent(
+                ShopWindowEvent.CartQuantityIncrease(
+                    productId = productId
+                )
+            )
+        },
+        onQuantityDecrease = { productId ->
+            viewModel.onEvent(
+                ShopWindowEvent.CartQuantityDecrease(
+                    productId = productId
+                )
+            )
+        },
     )
 }
 
@@ -27,8 +56,11 @@ fun ShopWindowRoute(
 private fun ShopWindowRoute(
     uiState: ShopWindowState,
     appState: NiftyOrdersAppState,
+    isExpandedScreen: Boolean,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
-    isExpandedScreen: Boolean
+    onProductClick: (Long) -> Unit,
+    onQuantityIncrease: (Long) -> Unit,
+    onQuantityDecrease: (Long) -> Unit
 ) {
     val shopWindowScreenType = getScreenType(
         isExpandedScreen = isExpandedScreen,
@@ -38,10 +70,18 @@ private fun ShopWindowRoute(
         ShopWindowScreenType.ShopWindowScreenWithCart -> ShopWindowScreenWithCartScreen(
             appState = appState,
             doScroll = doScroll,
-            uiState = uiState
+            uiState = uiState,
+            onProductClick = onProductClick,
+            onQuantityIncrease = onQuantityIncrease,
+            onQuantityDecrease = onQuantityDecrease
         )
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
-        ShopWindowScreenType.CartScreen -> CartScreen(productsInCart = uiState.productsInCart)
+        ShopWindowScreenType.CartScreen -> CartScreen(
+            productsInCart = uiState.productsInCart,
+            onProductClick = onProductClick,
+            onQuantityIncrease = onQuantityIncrease,
+            onQuantityDecrease = onQuantityDecrease
+        )
     }
 }
 

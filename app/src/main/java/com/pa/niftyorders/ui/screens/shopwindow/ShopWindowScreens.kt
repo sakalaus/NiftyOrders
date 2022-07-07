@@ -63,8 +63,11 @@ fun ShopWindowScreen() {
 @Composable
 fun ShopWindowScreenWithCartScreen(
     uiState: ShopWindowState,
+    appState: NiftyOrdersAppState,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
-    appState: NiftyOrdersAppState
+    onProductClick: (Long) -> Unit,
+    onQuantityIncrease: (Long) -> Unit,
+    onQuantityDecrease: (Long) -> Unit
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
         NiftySurface(
@@ -86,14 +89,22 @@ fun ShopWindowScreenWithCartScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             CartScreen(
-                productsInCart = uiState.productsInCart
+                productsInCart = uiState.productsInCart,
+                onProductClick = onProductClick,
+                onQuantityIncrease = onQuantityIncrease,
+                onQuantityDecrease = onQuantityDecrease
             )
         }
     }
 }
 
 @Composable
-fun CartScreen(productsInCart: List<OrderLine>) {
+fun CartScreen(
+    productsInCart: List<OrderLine>,
+    onProductClick: (Long) -> Unit,
+    onQuantityIncrease: (Long) -> Unit,
+    onQuantityDecrease: (Long) -> Unit
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Center,
@@ -110,7 +121,10 @@ fun CartScreen(productsInCart: List<OrderLine>) {
             CartItems(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.7f), productsInCart = productsInCart
+                    .fillMaxHeight(0.7f), productsInCart = productsInCart,
+                onProductClick = onProductClick,
+                onQuantityIncrease = onQuantityIncrease,
+                onQuantityDecrease = onQuantityDecrease
             )
             CartFooter(
                 modifier = Modifier
@@ -124,7 +138,10 @@ fun CartScreen(productsInCart: List<OrderLine>) {
 @Composable
 fun CartItems(
     productsInCart: List<OrderLine>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onProductClick: (Long) -> Unit,
+    onQuantityIncrease: (Long) -> Unit,
+    onQuantityDecrease: (Long) -> Unit
 ) {
     NiftySurface(
         backgroundColor = ThemeElements.colors.primaryBackgroundColor,
@@ -144,9 +161,9 @@ fun CartItems(
                         .height(60.dp),
                     index = index,
                     orderLine = orderLine,
-                    onProductClick = {},
-                    onQuantityDecrease = {},
-                    onQuantityIncrease = {}
+                    onProductClick = onProductClick,
+                    onQuantityDecrease = onQuantityDecrease,
+                    onQuantityIncrease = onQuantityIncrease
                 )
             }
         }
@@ -158,9 +175,9 @@ fun CartRow(
     modifier: Modifier = Modifier,
     orderLine: OrderLine,
     index: Int,
-    onProductClick: (Product) -> Unit,
-    onQuantityIncrease: (OrderLine) -> Unit,
-    onQuantityDecrease: (OrderLine) -> Unit,
+    onProductClick: (Long) -> Unit,
+    onQuantityIncrease: (Long) -> Unit,
+    onQuantityDecrease: (Long) -> Unit
 ) {
     Box(modifier = Modifier.then(Modifier.padding(vertical = 4.dp))) {
         Row(modifier = modifier.fillMaxSize()) {
@@ -226,21 +243,21 @@ fun CartRow(
                             horizontalArrangement = Arrangement.Center
                         ) {
                             ArithmeticBox(
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(20.dp),
                                 text = "+",
                                 onKeyPress = {})
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(12.dp))
                             Text(
                                 text = orderLine.quantity.toInt().toString(),
                                 style = TextStyle(
                                     color = ThemeElements.colors.secondaryTextColor,
-                                    fontSize = 16.sp,
+                                    fontSize = 14.sp,
                                     fontWeight = FontWeight.Bold
                                 )
                             )
-                            Spacer(modifier = Modifier.width(8.dp))
+                            Spacer(modifier = Modifier.width(12.dp))
                             ArithmeticBox(
-                                modifier = Modifier.size(24.dp),
+                                modifier = Modifier.size(20.dp),
                                 text = "-",
                                 onKeyPress = {})
                         }

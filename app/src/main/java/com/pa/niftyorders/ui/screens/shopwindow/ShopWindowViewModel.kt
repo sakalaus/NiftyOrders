@@ -29,6 +29,15 @@ class ShopWindowViewModel @Inject constructor(
         }
     }
 
+    fun onEvent(event: ShopWindowEvent){
+        when (event){
+            is ShopWindowEvent.ProductRowScroll -> doScroll(event.lazyListState, event.coroutineScope)
+            is ShopWindowEvent.CartProductSelection -> TODO()
+            is ShopWindowEvent.CartQuantityDecrease -> TODO()
+            is ShopWindowEvent.CartQuantityIncrease -> TODO()
+        }
+    }
+
     val doScroll: (
         lazyListState: LazyListState,
         scope: CoroutineScope
