@@ -6,10 +6,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.use_cases.OrderUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,9 +28,17 @@ class ShopWindowViewModel @Inject constructor(
             uiState = uiState.copy(topProducts = topProducts)
         }
         viewModelScope.launch {
-            val productsInCart = orderUseCases.getProductsInCart()
-            uiState = uiState.copy(productsInCart = productsInCart)
+            val (productsInCart, productsTotalPrice) = updateProductsInCart(orderUseCases)
+            uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
         }
+    }
+
+    private suspend fun updateProductsInCart(getProductsInCart: OrderUseCases): Pair<List<CartLine>, BigDecimal> {
+        val productsInCart = orderUseCases.getProductsInCart()
+        val productsTotalPrice = productsInCart.fold(BigDecimal(0)) { initial, item ->
+            initial + item.totalPrice
+        }
+        return Pair(productsInCart, productsTotalPrice)
     }
 
     fun onEvent(event: ShopWindowEvent) {
@@ -52,8 +62,9 @@ class ShopWindowViewModel @Inject constructor(
 
     private fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {
         viewModelScope.launch {
-            orderUseCases.changeQuantityInCart(cartLineId = cartLineId, changeBy = changeBy)
-            uiState = uiState.copy(productsInCart = orderUseCases.getProductsInCart())
+            orderUseCases.changeQuantityInCart(uiState.productsInCart, cartLineId = cartLineId, changeQuantityBy = changeBy)
+            val (productsInCart, productsTotalPrice) = updateProductsInCart(orderUseCases)
+            uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
         }
     }
 

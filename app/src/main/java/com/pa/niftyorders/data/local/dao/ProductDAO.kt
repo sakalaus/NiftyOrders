@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
+import java.math.BigDecimal
 
 @Dao
 interface ProductDAO {
@@ -22,7 +23,7 @@ interface ProductDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createDemoCart(products: List<CartLine>)
 
-    @Query("Update cartLine SET quantity = quantity + :changeBy WHERE id == :cartLineId")
-    suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int)
+    @Query("Update cartLine SET quantity = quantity + :changeBy, totalPrice = totalPrice + :changeTotalPriceBy WHERE id == :cartLineId")
+    suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int, changeTotalPriceBy: BigDecimal)
 
 }

@@ -1,6 +1,5 @@
 package com.pa.niftyorders.ui.screens.shopwindow
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,7 +13,6 @@ import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -27,10 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -39,11 +34,8 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.R
 import com.pa.niftyorders.domain.model.entities.Product
-import com.pa.niftyorders.data.repository_mock.sampleCart
-import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.ui.NiftyOrdersAppState
 import com.pa.niftyorders.ui.screens.cart.CartScreen
-import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
 import kotlinx.coroutines.CoroutineScope
@@ -83,6 +75,7 @@ fun ShopWindowScreenWithCartScreen(
         ) {
             CartScreen(
                 productsInCart = uiState.productsInCart,
+                cartTotal = uiState.cartTotal,
                 onProductClick = onProductClick,
                 onQuantityIncrease = onQuantityIncrease,
                 onQuantityDecrease = onQuantityDecrease

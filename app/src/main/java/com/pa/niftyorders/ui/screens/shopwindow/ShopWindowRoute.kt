@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,6 +103,7 @@ private fun ShopWindowRoute(
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
         ShopWindowScreenType.CartScreen -> CartScreen(
             productsInCart = uiState.productsInCart,
+            cartTotal = uiState.cartTotal,
             onProductClick = onProductClick,
             onQuantityIncrease = onQuantityIncrease,
             onQuantityDecrease = onQuantityDecrease

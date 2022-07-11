@@ -6,6 +6,7 @@ import com.pa.niftyorders.data.repository_mock.sampleProducts
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.domain.repository.Repository
+import java.math.BigDecimal
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
@@ -22,8 +23,8 @@ class RepositoryImpl @Inject constructor(
         return dao.getCart()
     }
 
-    override suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {
-        return dao.changeQuantityInCart(cartLineId, changeBy)
+    override suspend fun changeQuantityInCart(cartLineId: Long, changeQuanityBy: Int, changeTotalPriceBy: BigDecimal) {
+        return dao.changeQuantityInCart(cartLineId, changeQuanityBy, changeTotalPriceBy)
     }
 
     override suspend fun createDemoData() {

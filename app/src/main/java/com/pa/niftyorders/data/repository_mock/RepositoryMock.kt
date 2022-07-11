@@ -15,7 +15,7 @@ class RepositoryMock @Inject constructor() : Repository {
         return sampleCart
     }
 
-    override suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {
+    override suspend fun changeQuantityInCart(cartLineId: Long, changeQuanityBy: Int, changeTotalPriceBy: BigDecimal) {
         return
     }
 

@@ -5,11 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -28,10 +28,12 @@ import com.pa.niftyorders.ui.screens.shopwindow.ProductImage
 import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
+import java.math.BigDecimal
 
 @Composable
 fun CartScreen(
     productsInCart: List<CartLine>,
+    cartTotal: BigDecimal,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long) -> Unit,
     onQuantityDecrease: (Long) -> Unit
@@ -52,7 +54,7 @@ fun CartScreen(
             CartItems(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(0.7f), productsInCart = productsInCart,
+                    .fillMaxHeight(0.8f), productsInCart = productsInCart,
                 onProductClick = onProductClick,
                 onQuantityIncrease = onQuantityIncrease,
                 onQuantityDecrease = onQuantityDecrease
@@ -60,7 +62,8 @@ fun CartScreen(
             CartFooter(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(1f)
+                    .fillMaxHeight(),
+                totalPrice = cartTotal
             )
         }
     }
@@ -241,13 +244,88 @@ fun CartHeader(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun CartFooter(modifier: Modifier = Modifier) {
+fun CartFooter(
+    modifier: Modifier = Modifier,
+    totalPrice: BigDecimal
+) {
     NiftySurface(
         backgroundColor = ThemeElements.colors.primaryBackgroundColor,
         elevation = 4.dp,
         shape = RectangleShape,
-        modifier = modifier
+        modifier = modifier.then(
+            Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
+        )
     ) {
+        NiftySurface(
+            backgroundColor = ThemeElements.colors.secondaryBackgroundColor,
+            elevation = 4.dp,
+            shape = RectangleShape,
+            modifier = Modifier
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+                .wrapContentHeight()
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.5f),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .wrapContentHeight()
+                            .fillMaxWidth(0.5f),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.total),
+                            style = TextStyle(
+                                color = ThemeElements.colors.secondaryTextColor,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                    }
+                    Column(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .fillMaxHeight()
+                            .fillMaxWidth(),
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "$CURRENCY_SIGN ${totalPrice.toFloat()}",
+                            style = TextStyle(
+                                color = ThemeElements.colors.secondaryTextColor,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        )
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    BrandedOutlinedButton(
+                        text = "Place the order"
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -280,25 +358,22 @@ fun ArithmeticBox(
     }
 }
 
-@Preview(
-    name = "default",
-    backgroundColor = 0xFFFFF,
-    showBackground = true,
-    heightDp = 24,
-    widthDp = 24,
-    device = Devices.NEXUS_9
-)
 @Composable
-private fun ArithmeticBoxPreview() {
-    NiftyOrdersTheme() {
-        ArithmeticBox(
-            modifier = Modifier
-                .size(16.dp)
-                .clickable(onClick = {}),
-            id = 1,
-            text = "+",
-            disabled = true,
-            onKeyPress = {}
+fun BrandedOutlinedButton(
+    color: Color = ThemeElements.colors.accentColor,
+    captionColor: Color = ThemeElements.colors.buttonCaptionColor,
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    OutlinedButton(
+        onClick = onClick,
+        colors = ButtonDefaults.outlinedButtonColors(backgroundColor = color),
+        modifier = modifier
+    ) {
+        Text(
+            color = captionColor,
+            text = text
         )
     }
 }
@@ -307,20 +382,80 @@ private fun ArithmeticBoxPreview() {
     name = "default",
     backgroundColor = 0xFFFFF,
     showBackground = true,
-    heightDp = 60,
-    widthDp = 360,
     device = Devices.NEXUS_9
 )
 @Composable
-private fun CartRowPreview() {
+private fun CartScreenPreview() {
     NiftyOrdersTheme() {
-        CartRow(
-            cartLine = sampleCart[0],
-            index = 1,
+        CartScreen(
+            productsInCart = sampleCart,
+            cartTotal = 321321.21.toBigDecimal(),
             onProductClick = {},
             onQuantityIncrease = {},
             onQuantityDecrease = {}
         )
     }
-
 }
+
+
+
+
+//@Preview(
+//    name = "default",
+//    backgroundColor = 0xFFFFF,
+//    showBackground = true,
+//    heightDp = 60,
+//    widthDp = 360,
+//    device = Devices.NEXUS_9
+//)
+//@Composable
+//private fun CartFooterPreview() {
+//    NiftyOrdersTheme() {
+//        CartFooter(totalPrice = 2434.13.toBigDecimal())
+//    }
+//}
+//
+//@Preview(
+//    name = "default",
+//    backgroundColor = 0xFFFFF,
+//    showBackground = true,
+//    heightDp = 24,
+//    widthDp = 24,
+//    device = Devices.NEXUS_9
+//)
+//@Composable
+//private fun ArithmeticBoxPreview() {
+//    NiftyOrdersTheme() {
+//        ArithmeticBox(
+//            modifier = Modifier
+//                .size(16.dp)
+//                .clickable(onClick = {}),
+//            id = 1,
+//            text = "+",
+//            disabled = true,
+//            onKeyPress = {}
+//        )
+//    }
+//}
+//
+//@Preview(
+//    name = "default",
+//    backgroundColor = 0xFFFFF,
+//    showBackground = true,
+//    heightDp = 60,
+//    widthDp = 360,
+//    device = Devices.NEXUS_9
+//)
+//@Composable
+//private fun CartRowPreview() {
+//    NiftyOrdersTheme() {
+//        CartRow(
+//            cartLine = sampleCart[0],
+//            index = 1,
+//            onProductClick = {},
+//            onQuantityIncrease = {},
+//            onQuantityDecrease = {}
+//        )
+//    }
+//
+//}
