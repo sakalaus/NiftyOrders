@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pa.niftyorders.R
 import com.pa.niftyorders.ui.NiftyOrdersAppState
+import com.pa.niftyorders.ui.screens.cart.CartScreen
 import com.pa.niftyorders.ui.theme.ThemeElements
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
