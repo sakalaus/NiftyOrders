@@ -30,12 +30,6 @@ fun ShopWindowRoute(
 
     val uiState = viewModel.uiState
 
-//    if (viewModel.uiState.products.isEmpty()){
-//        LaunchedEffect(key1 = 1){
-//            appState.scaffoldState.drawerState.open()
-//        }
-//    }
-
     Scaffold(
         scaffoldState = appState.scaffoldState,
         drawerGesturesEnabled = true,
@@ -64,17 +58,17 @@ fun ShopWindowRoute(
                     )
                 )
             },
-            onQuantityIncrease = { productId ->
+            onQuantityIncrease = { cartLineId ->
                 viewModel.onEvent(
                     ShopWindowEvent.CartQuantityIncrease(
-                        productId = productId
+                        cartLineId = cartLineId
                     )
                 )
             },
-            onQuantityDecrease = { productId ->
+            onQuantityDecrease = { cartLineId ->
                 viewModel.onEvent(
                     ShopWindowEvent.CartQuantityDecrease(
-                        productId = productId
+                        cartLineId = cartLineId
                     )
                 )
             },

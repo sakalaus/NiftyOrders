@@ -52,7 +52,8 @@ class ShopWindowViewModel @Inject constructor(
 
     private fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {
         viewModelScope.launch {
-            orderUseCases.changeQuantityInCart()
+            orderUseCases.changeQuantityInCart(cartLineId = cartLineId, changeBy = changeBy)
+            uiState = uiState.copy(productsInCart = orderUseCases.getProductsInCart())
         }
     }
 
@@ -68,7 +69,9 @@ class ShopWindowViewModel @Inject constructor(
     }
 
     private fun createDemoData() {
-        viewModelScope.launch { orderUseCases.createDemoData() }
+        viewModelScope.launch {
+            orderUseCases.createDemoData()
+        }
     }
 
 }

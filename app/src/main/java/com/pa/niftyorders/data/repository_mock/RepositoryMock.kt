@@ -15,6 +15,10 @@ class RepositoryMock @Inject constructor() : Repository {
         return sampleCart
     }
 
+    override suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {
+        return
+    }
+
     override suspend fun createDemoData() {
         return
     }

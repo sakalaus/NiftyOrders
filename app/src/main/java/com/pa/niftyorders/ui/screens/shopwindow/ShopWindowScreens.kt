@@ -1,5 +1,6 @@
 package com.pa.niftyorders.ui.screens.shopwindow
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -161,6 +162,7 @@ fun CartItems(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CartRow(
     modifier: Modifier = Modifier,
@@ -240,14 +242,29 @@ fun CartRow(
                                 onKeyPress = onQuantityIncrease
                             )
                             Spacer(modifier = Modifier.width(12.dp))
-                            Text(
-                                text = cartLine.quantity.toInt().toString(),
-                                style = TextStyle(
-                                    color = ThemeElements.colors.secondaryTextColor,
-                                    fontSize = 14.sp,
-                                    fontWeight = FontWeight.Bold
+                            AnimatedContent(
+                                targetState = cartLine.quantity.toInt(),
+                                transitionSpec = {
+                                    if (targetState > initialState) {
+                                        slideInVertically { height -> height } + fadeIn() with
+                                                slideOutVertically { height -> -height } + fadeOut()
+                                    } else {
+                                        slideInVertically { height -> -height } + fadeIn() with
+                                                slideOutVertically { height -> height } + fadeOut()
+                                    }.using(
+                                        SizeTransform(clip = false)
+                                    )
+                                }
+                            ) { targetCount ->
+                                Text(
+                                    text = targetCount.toString(),
+                                    style = TextStyle(
+                                        color = ThemeElements.colors.secondaryTextColor,
+                                        fontSize = 14.sp,
+                                        fontWeight = FontWeight.Bold
+                                    )
                                 )
-                            )
+                            }
                             Spacer(modifier = Modifier.width(12.dp))
                             ArithmeticBox(
                                 modifier = Modifier.size(20.dp),

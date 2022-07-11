@@ -22,6 +22,10 @@ class RepositoryImpl @Inject constructor(
         return dao.getCart()
     }
 
+    override suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {
+        return dao.changeQuantityInCart(cartLineId, changeBy)
+    }
+
     override suspend fun createDemoData() {
         dao.createDemoProducts(sampleProducts)
         dao.createDemoCart(sampleCart)

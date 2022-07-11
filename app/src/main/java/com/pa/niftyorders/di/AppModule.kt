@@ -5,10 +5,7 @@ import androidx.room.Room
 import com.pa.niftyorders.data.local.NiftyDataBase
 import com.pa.niftyorders.data.repository_impl.RepositoryImpl
 import com.pa.niftyorders.domain.repository.Repository
-import com.pa.niftyorders.domain.use_cases.CreateDemoData
-import com.pa.niftyorders.domain.use_cases.GetProductsInCart
-import com.pa.niftyorders.domain.use_cases.GetTopProducts
-import com.pa.niftyorders.domain.use_cases.OrderUseCases
+import com.pa.niftyorders.domain.use_cases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,6 +34,7 @@ object AppModule {
         return OrderUseCases(
             getTopProducts = GetTopProducts(repository),
             getProductsInCart = GetProductsInCart(repository),
+            changeQuantityInCart = ChangeQuantityInCart(repository),
             createDemoData = CreateDemoData(repository)
         )
     }

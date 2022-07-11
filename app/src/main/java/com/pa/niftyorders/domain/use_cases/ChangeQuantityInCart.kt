@@ -1,7 +1,9 @@
 package com.pa.niftyorders.domain.use_cases
 
-class ChangeQuantityInCart {
-    suspend operator fun invoke(){
+import com.pa.niftyorders.domain.repository.Repository
 
+class ChangeQuantityInCart(val repository: Repository) {
+    suspend operator fun invoke(cartLineId: Long, changeBy: Int) {
+        repository.changeQuantityInCart(cartLineId = cartLineId, changeBy = changeBy)
     }
 }
