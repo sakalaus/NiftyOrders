@@ -53,7 +53,7 @@ fun ShopWindowRoute(
             },
             onProductClick = { productId ->
                 viewModel.onEvent(
-                    ShopWindowEvent.CartProductSelection(
+                    ShopWindowEvent.ProductInDisplaySelection(
                         productId = productId
                     )
                 )
@@ -72,6 +72,13 @@ fun ShopWindowRoute(
                     )
                 )
             },
+            onAddToCart = { productId ->
+                viewModel.onEvent(
+                    ShopWindowEvent.ProductInDisplaySelection(
+                        productId = productId
+                    )
+                )
+            }
         )
     }
 }
@@ -84,7 +91,8 @@ private fun ShopWindowRoute(
     doScroll: (LazyListState, CoroutineScope) -> Unit,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long) -> Unit,
-    onQuantityDecrease: (Long) -> Unit
+    onQuantityDecrease: (Long) -> Unit,
+    onAddToCart: (Long) -> Unit
 ) {
     val shopWindowScreenType = getScreenType(
         isExpandedScreen = isExpandedScreen,
@@ -98,7 +106,8 @@ private fun ShopWindowRoute(
             uiState = uiState,
             onProductClick = onProductClick,
             onQuantityIncrease = onQuantityIncrease,
-            onQuantityDecrease = onQuantityDecrease
+            onQuantityDecrease = onQuantityDecrease,
+            onAddToCart = onAddToCart
         )
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
         ShopWindowScreenType.CartScreen -> CartScreen(

@@ -93,11 +93,10 @@ fun CartItems(
                         .padding(4.dp)
                         .fillMaxWidth()
                         .height(60.dp),
-                    index = index,
                     cartLine = cartLine,
-                    onProductClick = onProductClick,
-                    onQuantityDecrease = onQuantityDecrease,
-                    onQuantityIncrease = onQuantityIncrease
+                    onProductInCartClick = onProductClick,
+                    onQuantityIncrease = onQuantityIncrease,
+                    onQuantityDecrease = onQuantityDecrease
                 )
             }
         }
@@ -109,8 +108,7 @@ fun CartItems(
 fun CartRow(
     modifier: Modifier = Modifier,
     cartLine: CartLine,
-    index: Int,
-    onProductClick: (Long) -> Unit,
+    onProductInCartClick: (Long) -> Unit,
     onQuantityIncrease: (Long) -> Unit,
     onQuantityDecrease: (Long) -> Unit
 ) {
@@ -145,79 +143,89 @@ fun CartRow(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(),
-                    verticalAlignment = Alignment.Bottom
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth(0.5f)
-                            .fillMaxHeight()
-                    ) {
-                        Text(
-                            text = "$CURRENCY_SIGN ${cartLine.totalPrice.toFloat()}",
-                            color = ThemeElements.colors.accentColor,
-                            style = TextStyle(
-                                color = ThemeElements.colors.accentColor,
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Bold
-                            ),
-                            maxLines = 1,
-                            overflow = TextOverflow.Visible
+                CartQuantity(cartLine, onQuantityDecrease, onQuantityIncrease)
+            }
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalAnimationApi::class)
+private fun CartQuantity(
+    cartLine: CartLine,
+    onQuantityDecrease: (Long) -> Unit,
+    onQuantityIncrease: (Long) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+        verticalAlignment = Alignment.Bottom
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(0.5f)
+                .fillMaxHeight()
+        ) {
+            Text(
+                text = "$CURRENCY_SIGN ${cartLine.totalPrice.toFloat()}",
+                color = ThemeElements.colors.accentColor,
+                style = TextStyle(
+                    color = ThemeElements.colors.accentColor,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Visible
+            )
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .fillMaxHeight()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                ArithmeticBox(
+                    modifier = Modifier.size(20.dp),
+                    id = cartLine.id,
+                    text = stringResource(R.string.minus_sign),
+                    disabled = (cartLine.quantity == 0f),
+                    onKeyPress = onQuantityDecrease
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                AnimatedContent(
+                    targetState = cartLine.quantity.toInt(),
+                    transitionSpec = {
+                        if (targetState > initialState) {
+                            slideInVertically { height -> height } + fadeIn() with
+                                    slideOutVertically { height -> -height } + fadeOut()
+                        } else {
+                            slideInVertically { height -> -height } + fadeIn() with
+                                    slideOutVertically { height -> height } + fadeOut()
+                        }.using(
+                            SizeTransform(clip = false)
                         )
                     }
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillMaxHeight()
-                    ) {
-                        Row(
-                            modifier = Modifier.fillMaxSize(),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            ArithmeticBox(
-                                modifier = Modifier.size(20.dp),
-                                id = cartLine.id,
-                                text = stringResource(R.string.minus_sign),
-                                disabled = (cartLine.quantity == 0f),
-                                onKeyPress = onQuantityDecrease
-                            )
-                            Spacer(modifier = Modifier.width(12.dp))
-                            AnimatedContent(
-                                targetState = cartLine.quantity.toInt(),
-                                transitionSpec = {
-                                    if (targetState > initialState) {
-                                        slideInVertically { height -> height } + fadeIn() with
-                                                slideOutVertically { height -> -height } + fadeOut()
-                                    } else {
-                                        slideInVertically { height -> -height } + fadeIn() with
-                                                slideOutVertically { height -> height } + fadeOut()
-                                    }.using(
-                                        SizeTransform(clip = false)
-                                    )
-                                }
-                            ) { targetCount ->
-                                Text(
-                                    text = targetCount.toString(),
-                                    style = TextStyle(
-                                        color = ThemeElements.colors.secondaryTextColor,
-                                        fontSize = 14.sp,
-                                        fontWeight = FontWeight.Bold
-                                    )
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(12.dp))
-                            ArithmeticBox(
-                                modifier = Modifier.size(20.dp),
-                                id = cartLine.id,
-                                text = stringResource(R.string.plus_sign),
-                                onKeyPress = onQuantityIncrease
-                            )
-                        }
-                    }
+                ) { targetCount ->
+                    Text(
+                        text = targetCount.toString(),
+                        style = TextStyle(
+                            color = ThemeElements.colors.secondaryTextColor,
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
                 }
+                Spacer(modifier = Modifier.width(12.dp))
+                ArithmeticBox(
+                    modifier = Modifier.size(20.dp),
+                    id = cartLine.id,
+                    text = stringResource(R.string.plus_sign),
+                    onKeyPress = onQuantityIncrease
+                )
             }
         }
     }
@@ -396,8 +404,6 @@ private fun CartScreenPreview() {
         )
     }
 }
-
-
 
 
 //@Preview(

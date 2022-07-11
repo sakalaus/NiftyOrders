@@ -26,10 +26,14 @@ class ShopWindowViewModel @Inject constructor(
         viewModelScope.launch {
             val topProducts = orderUseCases.getTopProducts()
             uiState = uiState.copy(topProducts = topProducts)
+            uiState = uiState.copy(products = topProducts) // TODO Change
         }
         viewModelScope.launch {
             val (productsInCart, productsTotalPrice) = updateProductsInCart(orderUseCases)
             uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
+        }
+        if (uiState.topProducts.isEmpty()){
+        //     createDemoData()
         }
     }
 
@@ -47,7 +51,7 @@ class ShopWindowViewModel @Inject constructor(
                 event.lazyListState,
                 event.coroutineScope
             )
-            is ShopWindowEvent.CartProductSelection -> TODO()
+            is ShopWindowEvent.ProductInCartSelection -> TODO()
             is ShopWindowEvent.CartQuantityIncrease -> changeQuantityInCart(
                 cartLineId = event.cartLineId,
                 changeBy = 1
@@ -56,8 +60,18 @@ class ShopWindowViewModel @Inject constructor(
                 cartLineId = event.cartLineId,
                 changeBy = -1
             )
+            is ShopWindowEvent.ProductInDisplaySelection -> startAddToCartDialog(
+                productId = event.productId
+            )
             ShopWindowEvent.DemoDataCreation -> createDemoData()
         }
+    }
+
+    private fun startAddToCartDialog(
+        productId: Long
+    ){
+        val selectedProduct = uiState.products.first{ it.id == productId }
+        uiState = uiState.copy(addToCartDialogOpen = true, selectedProduct = selectedProduct)
     }
 
     private fun changeQuantityInCart(cartLineId: Long, changeBy: Int) {

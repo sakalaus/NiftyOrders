@@ -29,12 +29,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.R
 import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.ui.NiftyOrdersAppState
+import com.pa.niftyorders.ui.screens.cart.BrandedOutlinedButton
 import com.pa.niftyorders.ui.screens.cart.CartScreen
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
@@ -52,8 +54,15 @@ fun ShopWindowScreenWithCartScreen(
     doScroll: (LazyListState, CoroutineScope) -> Unit,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long) -> Unit,
-    onQuantityDecrease: (Long) -> Unit
+    onQuantityDecrease: (Long) -> Unit,
+    onAddToCart: (Long) -> Unit
 ) {
+    if (uiState.addToCartDialogOpen) {
+        AddToCartDialog(
+            product = uiState.selectedProduct!!,
+            onAddToCart = onAddToCart
+        )
+    }
     Row(modifier = Modifier.fillMaxSize()) {
         NiftySurface(
             backgroundColor = ThemeElements.colors.secondaryBackgroundColor,
@@ -63,7 +72,8 @@ fun ShopWindowScreenWithCartScreen(
         ) {
             ProductsDisplay(
                 topProducts = uiState.topProducts,
-                doScroll = doScroll
+                doScroll = doScroll,
+                onProductInDisplaySelect =  onProductClick
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -83,6 +93,7 @@ fun ShopWindowScreenWithCartScreen(
         }
     }
 }
+
 @Composable
 fun ProductSectionHeader(
     caption: String,
@@ -124,7 +135,8 @@ fun ProductSectionHeader(
 @Composable
 fun ProductsDisplay(
     topProducts: List<Product>,
-    doScroll: (LazyListState, CoroutineScope) -> Unit
+    doScroll: (LazyListState, CoroutineScope) -> Unit,
+    onProductInDisplaySelect: (Long) -> Unit
 ) {
     val topProductsLazyRowState = rememberLazyListState()
     val scope = rememberCoroutineScope()
@@ -159,7 +171,7 @@ fun ProductsDisplay(
                         modifier = Modifier.padding(4.dp),
                         index = index,
                         product = product,
-                        onProductClick = {}
+                        onProductClick = onProductInDisplaySelect
                     )
                 }
             }
@@ -188,7 +200,7 @@ fun ProductImage(
                 .build(),
             contentDescription = contentDescription,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Crop
         )
     }
 }
@@ -300,6 +312,71 @@ private fun ProductCard(
                 ),
                 modifier = Modifier.padding(horizontal = 4.dp)
             )
+        }
+    }
+}
+
+@Composable
+fun AddToCartDialog(
+    product: Product,
+    onAddToCart: (Long) -> Unit
+) {
+    Dialog(onDismissRequest = {}) {
+        Box(modifier = Modifier.padding(0.dp)) {
+            Column(
+                modifier = Modifier
+                    .background(ThemeElements.colors.secondaryBackgroundColor)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .fillMaxHeight(0.7f)
+                ) {
+                    AsyncImage(
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(product.imageUrl)
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Product image",
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(vertical = 12.dp, horizontal = 8.dp)
+                ) {
+                    Text(
+                        text = product.name,
+                        style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    )
+                }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(vertical = 12.dp, horizontal = 8.dp)
+                ) {
+                    Text(
+                        text = product.description,
+                        style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.Normal
+                        )
+                    )
+                }
+            }
+            BrandedOutlinedButton(text = stringResource(R.string.add_to_cart))
         }
     }
 }

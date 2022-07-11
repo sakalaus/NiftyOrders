@@ -11,7 +11,9 @@ data class ShopWindowState(
     val topProducts: List<Product> = emptyList(),
     val recommendedProducts: List<Product> = emptyList(),
     val featuredGroups: List<Product> = emptyList(),
-    val productsInCart: List<CartLine> = emptyList()
+    val productsInCart: List<CartLine> = emptyList(),
+    val addToCartDialogOpen: Boolean = false,
+    val selectedProduct: Product? = null
 ) {
 }
 
