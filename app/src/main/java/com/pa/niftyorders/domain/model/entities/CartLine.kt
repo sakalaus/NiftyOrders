@@ -6,12 +6,12 @@ import java.math.BigDecimal
 
 @Entity
 data class CartLine(
-    @PrimaryKey
-    val id: Long,
-    val name: String,
-    val productId: Long,
-    val quantity: Float,
-    val price: BigDecimal,
-    val totalPrice: BigDecimal,
-    val imageUrl: String
+    @PrimaryKey(autoGenerate = true)
+    val id: Long? = null,
+    val name: String = "",
+    val productId: Long = -1,
+    val quantity: Float = 0f,
+    val price: BigDecimal = BigDecimal(0),
+    val totalPrice: BigDecimal = BigDecimal(0),
+    val imageUrl: String = ""
 )

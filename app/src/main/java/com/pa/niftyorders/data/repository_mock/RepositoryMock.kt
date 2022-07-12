@@ -23,6 +23,10 @@ class RepositoryMock @Inject constructor() : Repository {
         return
     }
 
+    override suspend fun addProductToCart(cartLine: CartLine) {
+        return
+    }
+
 }
 
 val sampleProducts = listOf(

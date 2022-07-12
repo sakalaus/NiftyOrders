@@ -30,13 +30,19 @@ import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
 import java.math.BigDecimal
 
+fun check(){
+
+
+}
+
+
 @Composable
 fun CartScreen(
     productsInCart: List<CartLine>,
     cartTotal: BigDecimal,
     onProductClick: (Long) -> Unit,
-    onQuantityIncrease: (Long) -> Unit,
-    onQuantityDecrease: (Long) -> Unit
+    onQuantityIncrease: (Long?) -> Unit,
+    onQuantityDecrease: (Long?) -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -74,8 +80,8 @@ fun CartItems(
     productsInCart: List<CartLine>,
     modifier: Modifier = Modifier,
     onProductClick: (Long) -> Unit,
-    onQuantityIncrease: (Long) -> Unit,
-    onQuantityDecrease: (Long) -> Unit
+    onQuantityIncrease: (Long?) -> Unit,
+    onQuantityDecrease: (Long?) -> Unit
 ) {
     NiftySurface(
         backgroundColor = ThemeElements.colors.primaryBackgroundColor,
@@ -86,7 +92,7 @@ fun CartItems(
         LazyColumn() {
             itemsIndexed(
                 items = productsInCart,
-                key = { _, orderLine -> orderLine.productId })
+                key = { _, orderLine -> orderLine.id!! })
             { index: Int, cartLine: CartLine ->
                 CartRow(
                     modifier = Modifier
@@ -109,8 +115,8 @@ fun CartRow(
     modifier: Modifier = Modifier,
     cartLine: CartLine,
     onProductInCartClick: (Long) -> Unit,
-    onQuantityIncrease: (Long) -> Unit,
-    onQuantityDecrease: (Long) -> Unit
+    onQuantityIncrease: (Long?) -> Unit,
+    onQuantityDecrease: (Long?) -> Unit
 ) {
     Box(modifier = Modifier.then(Modifier.padding(vertical = 4.dp))) {
         Row(modifier = modifier.fillMaxSize()) {
@@ -151,10 +157,10 @@ fun CartRow(
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class)
-private fun CartQuantity(
+fun CartQuantity(
     cartLine: CartLine,
-    onQuantityDecrease: (Long) -> Unit,
-    onQuantityIncrease: (Long) -> Unit
+    onQuantityDecrease: (Long?) -> Unit,
+    onQuantityIncrease: (Long?) -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -341,9 +347,9 @@ fun CartFooter(
 fun ArithmeticBox(
     modifier: Modifier,
     text: String,
-    id: Long,
+    id: Long?,
     disabled: Boolean = false,
-    onKeyPress: (Long) -> Unit
+    onKeyPress: (Long?) -> Unit
 ) {
     NiftySurface(
         modifier = if (disabled) modifier else modifier.then(Modifier.clickable { onKeyPress(id) }),

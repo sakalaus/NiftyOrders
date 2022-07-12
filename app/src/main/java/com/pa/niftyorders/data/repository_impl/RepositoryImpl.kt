@@ -32,5 +32,9 @@ class RepositoryImpl @Inject constructor(
         dao.createDemoCart(sampleCart)
     }
 
+    override suspend fun addProductToCart(cartline: CartLine) {
+        dao.addProductToCart(cartline)
+    }
+
 
 }

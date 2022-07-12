@@ -34,9 +34,11 @@ import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.R
+import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.ui.NiftyOrdersAppState
 import com.pa.niftyorders.ui.screens.cart.BrandedOutlinedButton
+import com.pa.niftyorders.ui.screens.cart.CartQuantity
 import com.pa.niftyorders.ui.screens.cart.CartScreen
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
@@ -53,14 +55,20 @@ fun ShopWindowScreenWithCartScreen(
     appState: NiftyOrdersAppState,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
     onProductClick: (Long) -> Unit,
-    onQuantityIncrease: (Long) -> Unit,
-    onQuantityDecrease: (Long) -> Unit,
-    onAddToCart: (Long) -> Unit
+    onQuantityIncrease: (Long?) -> Unit,
+    onQuantityDecrease: (Long?) -> Unit,
+    onProductInDisplaySelect: (Long) -> Unit,
+    onAddToCart: (CartLine) -> Unit,
+    onDismissAddToCart: () -> Unit
 ) {
     if (uiState.addToCartDialogOpen) {
         AddToCartDialog(
             product = uiState.selectedProduct!!,
-            onAddToCart = onAddToCart
+            cartLine = uiState.pendingCartLine!!,
+            onQuantityIncrease = onQuantityIncrease,
+            onQuantityDecrease = onQuantityDecrease,
+            onAddToCart = onAddToCart,
+            onDismissAddToCart = onDismissAddToCart
         )
     }
     Row(modifier = Modifier.fillMaxSize()) {
@@ -319,9 +327,13 @@ private fun ProductCard(
 @Composable
 fun AddToCartDialog(
     product: Product,
-    onAddToCart: (Long) -> Unit
+    cartLine: CartLine,
+    onQuantityIncrease: (Long?) -> Unit,
+    onQuantityDecrease: (Long?) -> Unit,
+    onDismissAddToCart: () -> Unit,
+    onAddToCart: (CartLine) -> Unit
 ) {
-    Dialog(onDismissRequest = {}) {
+    Dialog(onDismissRequest = onDismissAddToCart) {
         Box(modifier = Modifier.padding(0.dp)) {
             Column(
                 modifier = Modifier
@@ -360,7 +372,7 @@ fun AddToCartDialog(
                         )
                     )
                 }
-
+                CartQuantity(cartLine, onQuantityDecrease, onQuantityIncrease)
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -376,7 +388,9 @@ fun AddToCartDialog(
                     )
                 }
             }
-            BrandedOutlinedButton(text = stringResource(R.string.add_to_cart))
+            BrandedOutlinedButton(text = stringResource(R.string.add_to_cart)){
+                onAddToCart(cartLine)
+            }
         }
     }
 }

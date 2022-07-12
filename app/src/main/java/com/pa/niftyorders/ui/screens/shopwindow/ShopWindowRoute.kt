@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.pa.niftyorders.R
+import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.ui.NiftyOrdersAppState
 import com.pa.niftyorders.ui.screens.cart.CartScreen
 import com.pa.niftyorders.ui.theme.ThemeElements
@@ -53,7 +54,7 @@ fun ShopWindowRoute(
             },
             onProductClick = { productId ->
                 viewModel.onEvent(
-                    ShopWindowEvent.ProductInDisplaySelection(
+                    ShopWindowEvent.ProductInDisplaySelect(
                         productId = productId
                     )
                 )
@@ -72,11 +73,23 @@ fun ShopWindowRoute(
                     )
                 )
             },
-            onAddToCart = { productId ->
+            onProductInDisplaySelect = { productId ->
                 viewModel.onEvent(
-                    ShopWindowEvent.ProductInDisplaySelection(
+                    ShopWindowEvent.ProductInDisplaySelect(
                         productId = productId
                     )
+                )
+            },
+            onAddToCart = { cartLine ->
+                viewModel.onEvent(
+                    ShopWindowEvent.ProductAddToCart(
+                        cartLine = cartLine
+                    )
+                )
+            },
+            onDismissAddToCart = {
+                viewModel.onEvent(
+                    ShopWindowEvent.AddToCartDismiss
                 )
             }
         )
@@ -90,9 +103,11 @@ private fun ShopWindowRoute(
     isExpandedScreen: Boolean,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
     onProductClick: (Long) -> Unit,
-    onQuantityIncrease: (Long) -> Unit,
-    onQuantityDecrease: (Long) -> Unit,
-    onAddToCart: (Long) -> Unit
+    onQuantityIncrease: (Long?) -> Unit,
+    onQuantityDecrease: (Long?) -> Unit,
+    onAddToCart: (CartLine) -> Unit,
+    onProductInDisplaySelect: (Long) -> Unit,
+    onDismissAddToCart: () -> Unit
 ) {
     val shopWindowScreenType = getScreenType(
         isExpandedScreen = isExpandedScreen,
@@ -107,7 +122,9 @@ private fun ShopWindowRoute(
             onProductClick = onProductClick,
             onQuantityIncrease = onQuantityIncrease,
             onQuantityDecrease = onQuantityDecrease,
-            onAddToCart = onAddToCart
+            onProductInDisplaySelect = onProductInDisplaySelect,
+            onAddToCart = onAddToCart,
+            onDismissAddToCart = onDismissAddToCart
         )
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
         ShopWindowScreenType.CartScreen -> CartScreen(

@@ -18,12 +18,15 @@ interface ProductDAO {
     suspend fun getCart(): List<CartLine>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun addProductToCart(products: CartLine)
+
+    @Query("Update cartLine SET quantity = quantity + :changeBy, totalPrice = totalPrice + :changeTotalPriceBy WHERE id == :cartLineId")
+    suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int, changeTotalPriceBy: BigDecimal)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createDemoProducts(products: List<Product>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createDemoCart(products: List<CartLine>)
-
-    @Query("Update cartLine SET quantity = quantity + :changeBy, totalPrice = totalPrice + :changeTotalPriceBy WHERE id == :cartLineId")
-    suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int, changeTotalPriceBy: BigDecimal)
 
 }

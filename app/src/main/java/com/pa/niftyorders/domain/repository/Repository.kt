@@ -9,4 +9,5 @@ interface Repository {
     suspend fun getProductsInCart(): List<CartLine>
     suspend fun changeQuantityInCart(cartLineId: Long, changeQuantityBy: Int, changeTotalPriceBy: BigDecimal): Unit
     suspend fun createDemoData(): Unit
+    suspend fun addProductToCart(cartLine: CartLine)
 }

@@ -35,7 +35,8 @@ object AppModule {
             getTopProducts = GetTopProducts(repository),
             getProductsInCart = GetProductsInCart(repository),
             changeQuantityInCart = ChangeQuantityInCart(repository),
-            createDemoData = CreateDemoData(repository)
+            createDemoData = CreateDemoData(repository),
+            addProductToCart = AddProductToCart(repository)
         )
     }
 
