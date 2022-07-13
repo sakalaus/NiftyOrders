@@ -17,6 +17,12 @@ interface ProductDAO {
     @Query("Select * from CartLine")
     suspend fun getCart(): List<CartLine>
 
+    @Query("Delete from Product")
+    suspend fun deleteAllProducts(): Unit
+
+    @Query("Delete from CartLine")
+    suspend fun deleteWholeCart(): Unit
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addProductToCart(products: CartLine)
 

@@ -26,6 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,12 +36,15 @@ import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.R
+import com.pa.niftyorders.data.repository_mock.sampleCart
+import com.pa.niftyorders.data.repository_mock.sampleProducts
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.ui.NiftyOrdersAppState
 import com.pa.niftyorders.ui.screens.cart.BrandedOutlinedButton
 import com.pa.niftyorders.ui.screens.cart.CartQuantity
 import com.pa.niftyorders.ui.screens.cart.CartScreen
+import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
 import kotlinx.coroutines.CoroutineScope
@@ -380,7 +385,7 @@ fun AddToCartDialog(
                         .padding(vertical = 12.dp, horizontal = 8.dp)
                 ) {
                     Text(
-                        text = product.description,
+                        text = "Test",
                         style = TextStyle(
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Normal
@@ -396,4 +401,22 @@ fun AddToCartDialog(
 }
 
 
-
+@Preview(
+    name = "default",
+    backgroundColor = 0xFFFFF,
+    showBackground = true,
+    device = Devices.PIXEL_C
+)
+@Composable
+private fun AddToCartDialogPreview() {
+    NiftyOrdersTheme() {
+        AddToCartDialog(
+            product = sampleProducts[0],
+            cartLine = sampleCart[0].copy(id = null),
+            onQuantityIncrease = {},
+            onQuantityDecrease = {},
+            onDismissAddToCart = {},
+            onAddToCart = {}
+        )
+    }
+}

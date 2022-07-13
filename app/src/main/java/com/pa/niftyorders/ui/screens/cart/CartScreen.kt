@@ -30,12 +30,6 @@ import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
 import java.math.BigDecimal
 
-fun check(){
-
-
-}
-
-
 @Composable
 fun CartScreen(
     productsInCart: List<CartLine>,

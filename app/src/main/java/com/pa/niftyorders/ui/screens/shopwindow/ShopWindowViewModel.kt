@@ -33,7 +33,7 @@ class ShopWindowViewModel @Inject constructor(
             uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
         }
         if (uiState.topProducts.isEmpty()){
-             createDemoData()
+             //createDemoData()
         }
     }
 
@@ -103,6 +103,7 @@ class ShopWindowViewModel @Inject constructor(
             orderUseCases.addProductToCart(cartLine)
             val (productsInCart, productsTotalPrice) = refreshCartData(orderUseCases)
             uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
+            dismissAddToCartDialog()
         }
     }
 

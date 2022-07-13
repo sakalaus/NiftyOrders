@@ -33,63 +33,63 @@ val sampleProducts = listOf(
     Product(
         id = 1,
         name = "Adgeeka hot as the devil's toe, are you friend or foe",
-        description = "Straight out of Colombia",
         price = BigDecimal(200.99),
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         imageUrl = "https://cdn.w600.comps.canstockphoto.com/round-knolling-composition-of-various-pictures_csp87075789.jpg"
     ),
     Product(
         id = 2,
         name = "Mojito with a touch of rum",
-        description = "Freshed out",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/3279978A-FC6C-4231-A42C-DF759994C99C/Derivates/4278FB29-8E6B-4986-BF60-231C91231A01.jpg"
     ),
     Product(
         id = 3,
         name = "Paella de mariscos valenciana",
-        description = "De mariscos de la zona",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(299.99),
         imageUrl = "https://www.myfooddata.com/images/creative/splash.png"
     ),
     Product(
         id = 4,
         name = "Adgeeka hot as the devil's toe",
-        description = "Straight out of Colombia",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(200.99),
         imageUrl = "https://cdn.w600.comps.canstockphoto.com/round-knolling-composition-of-various-pictures_csp87075789.jpg"
     ),
     Product(
         id = 5,
         name = "Mojito with a touch of rum",
-        description = "Freshed out",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/3279978A-FC6C-4231-A42C-DF759994C99C/Derivates/4278FB29-8E6B-4986-BF60-231C91231A01.jpg"
     ),
     Product(
         id = 6,
         name = "Paella de mariscos valenciana",
-        description = "De mariscos de la zona",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(99.99),
         imageUrl = "https://www.myfooddata.com/images/creative/splash.png"
     ),
     Product(
         id = 7,
         name = "Adgeeka hot as the devil's toe",
-        description = "Straight out of Colombia",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(99.99),
         imageUrl = "https://www.chefmarket.ru/blog/wp-content/uploads/2018/05/3_1522162464_3dc93.jpg"
     ),
     Product(
         id = 8,
         name = "Mojito with a touch of rum",
-        description = "Freshed out",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/3279978A-FC6C-4231-A42C-DF759994C99C/Derivates/4278FB29-8E6B-4986-BF60-231C91231A01.jpg"
     ),
     Product(
         id = 9,
         name = "Paella de mariscos valenciana",
-        description = "De mariscos de la zona",
+        description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3]",
         price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/f3d7d1b4-4df6-4d72-b2f0-acf05cccae08/Derivates/4513fa48-f03c-4f8e-bea0-18385dd4bdd0.jpg"
     )

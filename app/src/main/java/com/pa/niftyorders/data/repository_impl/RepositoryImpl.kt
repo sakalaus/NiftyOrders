@@ -28,6 +28,8 @@ class RepositoryImpl @Inject constructor(
     }
 
     override suspend fun createDemoData() {
+        dao.deleteAllProducts()
+        dao.deleteWholeCart()
         dao.createDemoProducts(sampleProducts)
         dao.createDemoCart(sampleCart)
     }
