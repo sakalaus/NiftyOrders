@@ -1,9 +1,6 @@
 package com.pa.niftyorders.ui.screens.addToCart
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
@@ -28,7 +25,6 @@ import com.pa.niftyorders.data.repository_mock.sampleCart
 import com.pa.niftyorders.data.repository_mock.sampleProducts
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
-import com.pa.niftyorders.ui.screens.cart.BrandedOutlinedButton
 import com.pa.niftyorders.ui.screens.cart.CartQuantityPicker
 import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
@@ -85,7 +81,7 @@ fun AddToCartDialog(
                     item{
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillParentMaxWidth()
                                 .wrapContentHeight()
                                 .padding(vertical = 12.dp, horizontal = 8.dp)
                         ) {
@@ -112,7 +108,7 @@ fun AddToCartDialog(
                     item{
                         Row(
                             modifier = Modifier
-                                .fillMaxWidth()
+                                .fillParentMaxWidth()
                                 .wrapContentHeight()
                                 .padding(vertical = 14.dp, horizontal = 8.dp)
                         ) {

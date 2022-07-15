@@ -26,26 +26,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.zIndex
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.R
-import com.pa.niftyorders.data.repository_mock.sampleCart
-import com.pa.niftyorders.data.repository_mock.sampleProducts
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
+import com.pa.niftyorders.domain.model.entities.Promotion
 import com.pa.niftyorders.ui.NiftyOrdersAppState
 import com.pa.niftyorders.ui.screens.addToCart.AddToCartDialog
-import com.pa.niftyorders.ui.screens.cart.BrandedOutlinedButton
-import com.pa.niftyorders.ui.screens.cart.CartQuantityPicker
 import com.pa.niftyorders.ui.screens.cart.CartScreen
-import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
 import kotlinx.coroutines.CoroutineScope
@@ -86,6 +79,7 @@ fun ShopWindowScreenWithCartScreen(
         ) {
             ProductsDisplay(
                 topProducts = uiState.topProducts,
+                promotions = uiState.promotions,
                 doScroll = doScroll,
                 onProductInDisplaySelect =  onProductClick
             )
@@ -109,7 +103,7 @@ fun ShopWindowScreenWithCartScreen(
 }
 
 @Composable
-fun ProductSectionHeader(
+fun HorizontalSectionHeader(
     caption: String,
     doScroll: () -> Unit,
     arrowIcon: ImageVector,
@@ -149,10 +143,12 @@ fun ProductSectionHeader(
 @Composable
 fun ProductsDisplay(
     topProducts: List<Product>,
+    promotions: List<Promotion>,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
     onProductInDisplaySelect: (Long) -> Unit
 ) {
     val topProductsLazyRowState = rememberLazyListState()
+    val promotionsLazyRowState = rememberLazyListState()
     val scope = rememberCoroutineScope()
     val arrowIcon by remember(topProductsLazyRowState.firstVisibleItemIndex) {
         derivedStateOf {
@@ -169,13 +165,13 @@ fun ProductsDisplay(
             Spacer(modifier = Modifier.height(24.dp))
         }
         item {
-            ProductSectionHeader(
+            HorizontalSectionHeader(
                 caption = stringResource(R.string.top_products),
                 doScroll = { doScroll(topProductsLazyRowState, scope) },
                 arrowIcon = arrowIcon,
             )
             LazyRow(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillParentMaxWidth(),
                 state = topProductsLazyRowState
             ) {
                 itemsIndexed(
@@ -185,6 +181,31 @@ fun ProductsDisplay(
                         modifier = Modifier.padding(4.dp),
                         index = index,
                         product = product,
+                        onProductClick = onProductInDisplaySelect
+                    )
+                }
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+        item {
+            HorizontalSectionHeader(
+                caption = stringResource(R.string.promotions),
+                doScroll = { doScroll(promotionsLazyRowState, scope) },
+                arrowIcon = arrowIcon,
+            )
+            LazyRow(
+                modifier = Modifier.fillParentMaxWidth(),
+                state = promotionsLazyRowState
+            ) {
+                itemsIndexed(
+                    items = promotions,
+                    key = { _, promotion -> promotion.id }) { index, promotion ->
+                    PromotionCard(
+                        modifier = Modifier.padding(4.dp),
+                        index = index,
+                        promotion = promotion,
                         onProductClick = onProductInDisplaySelect
                     )
                 }
@@ -330,3 +351,63 @@ private fun ProductCard(
     }
 }
 
+@Composable
+private fun PromotionCard(
+    promotion: Promotion,
+    onProductClick: (Long) -> Unit,
+    index: Int,
+    modifier: Modifier = Modifier
+) {
+    ProductFoundation(
+        modifier = modifier
+            .size(
+                width = 120.dp,
+                height = 170.dp
+            )
+            .padding(bottom = 16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .clickable(onClick = { onProductClick(promotion.productId) })
+                .fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier
+                    .height(90.dp)
+                    .fillMaxWidth()
+                    .padding(4.dp)
+            ) {
+                ProductImage(
+                    imageUrl = promotion.imageUrl,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(120.dp)
+                        .align(Alignment.BottomCenter)
+                )
+            }
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = promotion.name,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+                style = TextStyle(
+                    color = ThemeElements.colors.primaryTextColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = "$CURRENCY_SIGN ${promotion.price.toFloat()}",
+                maxLines = 1,
+                style = TextStyle(
+                    color = ThemeElements.colors.accentColor,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                modifier = Modifier.padding(horizontal = 4.dp)
+            )
+        }
+    }
+}

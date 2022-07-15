@@ -32,8 +32,12 @@ class ShopWindowViewModel @Inject constructor(
             val (productsInCart, productsTotalPrice) = refreshCartData(orderUseCases)
             uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
         }
+        viewModelScope.launch {
+            val promotions = orderUseCases.getPromotions()
+            uiState = uiState.copy(promotions = promotions)
+        }
         if (uiState.topProducts.isEmpty()){
-          //  createDemoData()
+          //createDemoData()
         }
     }
 

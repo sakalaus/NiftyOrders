@@ -2,6 +2,7 @@ package com.pa.niftyorders.data.repository_mock
 
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
+import com.pa.niftyorders.domain.model.entities.Promotion
 import com.pa.niftyorders.domain.repository.Repository
 import java.math.BigDecimal
 import javax.inject.Inject
@@ -25,6 +26,10 @@ class RepositoryMock @Inject constructor() : Repository {
 
     override suspend fun addProductToCart(cartLine: CartLine) {
         return
+    }
+
+    override suspend fun getPromotions(): List<Promotion> {
+        return samplePromotions
     }
 
 }
@@ -130,4 +135,16 @@ val sampleCart = sampleProducts.take(7).mapIndexed() { index, item ->
         price = item.price,
         totalPrice = item.price * (index.toBigDecimal()+BigDecimal(1)),
         )
+}
+
+val samplePromotions = sampleProducts.take(5).mapIndexed() { index, item ->
+    Promotion(
+        id = index.toLong(),
+        productId = item.id,
+        discount = BigDecimal(index * 5),
+        price = item.price,
+        name = item.name,
+        description = "Get discount of ${index * 5}% only today",
+        imageUrl = item.imageUrl,
+    )
 }

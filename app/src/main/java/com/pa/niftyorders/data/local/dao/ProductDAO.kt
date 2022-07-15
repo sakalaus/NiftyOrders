@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
+import com.pa.niftyorders.domain.model.entities.Promotion
 import java.math.BigDecimal
 
 @Dao
@@ -14,11 +15,17 @@ interface ProductDAO {
     @Query("Select * from Product")
     suspend fun getAllProducts(): List<Product>
 
+    @Query("Select * from Promotion")
+    suspend fun getAllPromotions(): List<Promotion>
+
     @Query("Select * from CartLine")
     suspend fun getCart(): List<CartLine>
 
     @Query("Delete from Product")
     suspend fun deleteAllProducts(): Unit
+
+    @Query("Delete from Promotion")
+    suspend fun deleteAllPromotions(): Unit
 
     @Query("Delete from CartLine")
     suspend fun deleteWholeCart(): Unit
@@ -30,9 +37,12 @@ interface ProductDAO {
     suspend fun changeQuantityInCart(cartLineId: Long, changeBy: Int, changeTotalPriceBy: BigDecimal)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createDemoProducts(products: List<Product>)
+    suspend fun createProducts(products: List<Product>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun createDemoCart(products: List<CartLine>)
+    suspend fun createPromotions(products: List<Promotion>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun createCart(products: List<CartLine>)
 
 }

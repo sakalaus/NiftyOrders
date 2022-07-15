@@ -34,6 +34,7 @@ object AppModule {
         return OrderUseCases(
             getTopProducts = GetTopProducts(repository),
             getProductsInCart = GetProductsInCart(repository),
+            getPromotions = GetPromotions(repository),
             changeQuantityInCart = ChangeQuantityInCart(repository),
             createDemoData = CreateDemoData(repository),
             addProductToCart = AddProductToCart(repository)
