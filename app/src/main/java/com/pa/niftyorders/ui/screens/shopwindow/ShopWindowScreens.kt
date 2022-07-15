@@ -41,8 +41,9 @@ import com.pa.niftyorders.data.repository_mock.sampleProducts
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.ui.NiftyOrdersAppState
+import com.pa.niftyorders.ui.screens.addToCart.AddToCartDialog
 import com.pa.niftyorders.ui.screens.cart.BrandedOutlinedButton
-import com.pa.niftyorders.ui.screens.cart.CartQuantity
+import com.pa.niftyorders.ui.screens.cart.CartQuantityPicker
 import com.pa.niftyorders.ui.screens.cart.CartScreen
 import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
@@ -329,94 +330,3 @@ private fun ProductCard(
     }
 }
 
-@Composable
-fun AddToCartDialog(
-    product: Product,
-    cartLine: CartLine,
-    onQuantityIncrease: (Long?) -> Unit,
-    onQuantityDecrease: (Long?) -> Unit,
-    onDismissAddToCart: () -> Unit,
-    onAddToCart: (CartLine) -> Unit
-) {
-    Dialog(onDismissRequest = onDismissAddToCart) {
-        Box(modifier = Modifier.padding(0.dp)) {
-            Column(
-                modifier = Modifier
-                    .background(ThemeElements.colors.secondaryBackgroundColor)
-                    .padding(12.dp),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.7f)
-                ) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(product.imageUrl)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "Product image",
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(vertical = 12.dp, horizontal = 8.dp)
-                ) {
-                    Text(
-                        text = product.name,
-                        style = TextStyle(
-                            fontSize = 14.sp,
-                            fontWeight = FontWeight.Bold
-                        )
-                    )
-                }
-                CartQuantity(cartLine, onQuantityDecrease, onQuantityIncrease)
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(vertical = 12.dp, horizontal = 8.dp)
-                ) {
-                    Text(
-                        text = "Test",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.Normal
-                        )
-                    )
-                }
-            }
-            BrandedOutlinedButton(text = stringResource(R.string.add_to_cart)){
-                onAddToCart(cartLine)
-            }
-        }
-    }
-}
-
-
-@Preview(
-    name = "default",
-    backgroundColor = 0xFFFFF,
-    showBackground = true,
-    device = Devices.PIXEL_C
-)
-@Composable
-private fun AddToCartDialogPreview() {
-    NiftyOrdersTheme() {
-        AddToCartDialog(
-            product = sampleProducts[0],
-            cartLine = sampleCart[0].copy(id = null),
-            onQuantityIncrease = {},
-            onQuantityDecrease = {},
-            onDismissAddToCart = {},
-            onAddToCart = {}
-        )
-    }
-}

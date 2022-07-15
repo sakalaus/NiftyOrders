@@ -33,7 +33,7 @@ class ShopWindowViewModel @Inject constructor(
             uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
         }
         if (uiState.topProducts.isEmpty()){
-             //createDemoData()
+          //  createDemoData()
         }
     }
 

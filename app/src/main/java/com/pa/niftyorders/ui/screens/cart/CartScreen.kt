@@ -18,6 +18,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pa.niftyorders.R
@@ -143,7 +145,10 @@ fun CartRow(
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                CartQuantity(cartLine, onQuantityDecrease, onQuantityIncrease)
+                CartQuantityPicker(
+                    cartLine = cartLine,
+                    onQuantityIncrease = onQuantityIncrease,
+                    onQuantityDecrease = onQuantityDecrease)
             }
         }
     }
@@ -151,28 +156,33 @@ fun CartRow(
 
 @Composable
 @OptIn(ExperimentalAnimationApi::class)
-fun CartQuantity(
+fun CartQuantityPicker(
+    modifier: Modifier = Modifier,
     cartLine: CartLine,
+    boxSize: Dp = 20.dp,
+    fontSize: TextUnit = 16.sp,
+    boxFontSize: TextUnit = 16.sp,
     onQuantityDecrease: (Long?) -> Unit,
     onQuantityIncrease: (Long?) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(),
+            .wrapContentHeight(),
         verticalAlignment = Alignment.Bottom
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth(0.5f)
-                .fillMaxHeight()
+                .wrapContentHeight()
         ) {
             Text(
+                modifier = modifier,
                 text = "$CURRENCY_SIGN ${cartLine.totalPrice.toFloat()}",
                 color = ThemeElements.colors.accentColor,
                 style = TextStyle(
                     color = ThemeElements.colors.accentColor,
-                    fontSize = 16.sp,
+                    fontSize = fontSize,
                     fontWeight = FontWeight.Bold
                 ),
                 maxLines = 1,
@@ -182,20 +192,24 @@ fun CartQuantity(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .wrapContentHeight()
         ) {
             Row(
-                modifier = Modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.Center
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(end = 36.dp),
+                horizontalArrangement = Arrangement.End
             ) {
                 ArithmeticBox(
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(boxSize),
                     id = cartLine.id,
                     text = stringResource(R.string.minus_sign),
                     disabled = (cartLine.quantity == 0f),
+                    fontSize = boxFontSize,
                     onKeyPress = onQuantityDecrease
                 )
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(14.dp))
                 AnimatedContent(
                     targetState = cartLine.quantity.toInt(),
                     transitionSpec = {
@@ -214,16 +228,17 @@ fun CartQuantity(
                         text = targetCount.toString(),
                         style = TextStyle(
                             color = ThemeElements.colors.secondaryTextColor,
-                            fontSize = 14.sp,
+                            fontSize = fontSize,
                             fontWeight = FontWeight.Bold
                         )
                     )
                 }
-                Spacer(modifier = Modifier.width(12.dp))
+                Spacer(modifier = Modifier.width(14.dp))
                 ArithmeticBox(
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.size(boxSize),
                     id = cartLine.id,
                     text = stringResource(R.string.plus_sign),
+                    fontSize = boxFontSize,
                     onKeyPress = onQuantityIncrease
                 )
             }
@@ -343,6 +358,7 @@ fun ArithmeticBox(
     text: String,
     id: Long?,
     disabled: Boolean = false,
+    fontSize: TextUnit = 16.sp,
     onKeyPress: (Long?) -> Unit
 ) {
     NiftySurface(
@@ -359,7 +375,7 @@ fun ArithmeticBox(
             color = if (disabled) ThemeElements.colors.buttonCaptionDimmedColor else ThemeElements.colors.buttonCaptionColor,
             style = TextStyle(
                 textAlign = TextAlign.Center,
-                fontSize = 16.sp,
+                fontSize = fontSize,
                 fontWeight = FontWeight.Bold
             )
         )
