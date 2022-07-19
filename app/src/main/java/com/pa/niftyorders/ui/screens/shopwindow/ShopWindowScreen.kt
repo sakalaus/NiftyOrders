@@ -3,7 +3,6 @@ package com.pa.niftyorders.ui.screens.shopwindow
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,27 +19,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.pa.niftyorders.R
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
+import com.pa.niftyorders.domain.model.entities.ProductGroup
 import com.pa.niftyorders.domain.model.entities.Promotion
 import com.pa.niftyorders.ui.NiftyOrdersAppState
-import com.pa.niftyorders.ui.screens.addToCart.AddToCartDialog
 import com.pa.niftyorders.ui.screens.cart.CartScreen
+import com.pa.niftyorders.ui.components.featuredgroups.FeaturedProductGroups
+import com.pa.niftyorders.ui.components.productcard.ProductCard
+import com.pa.niftyorders.ui.components.promotioncard.PromotionCard
+import com.pa.niftyorders.ui.components.addtocart.AddToCartDialog
 import com.pa.niftyorders.ui.theme.ThemeElements
-import com.pa.niftyorders.utils.CURRENCY_SIGN
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
@@ -57,6 +52,7 @@ fun ShopWindowScreenWithCartScreen(
     onQuantityIncrease: (Long?) -> Unit,
     onQuantityDecrease: (Long?) -> Unit,
     onProductInDisplaySelect: (Long) -> Unit,
+    onFeaturedProductGroupSelect: (Long) -> Unit,
     onAddToCart: (CartLine) -> Unit,
     onDismissAddToCart: () -> Unit
 ) {
@@ -80,8 +76,11 @@ fun ShopWindowScreenWithCartScreen(
             ProductsDisplay(
                 topProducts = uiState.topProducts,
                 promotions = uiState.promotions,
+                featuredProductGroups = uiState.featuredProductGroups,
+                selectedFeaturedProductGroupId = uiState.selectedFeaturedProductGroupId,
                 doScroll = doScroll,
-                onProductInDisplaySelect =  onProductClick
+                onProductInDisplaySelect = onProductClick,
+                onFeaturedProductGroupSelect = onFeaturedProductGroupSelect
             )
         }
         Spacer(modifier = Modifier.width(8.dp))
@@ -143,9 +142,12 @@ fun HorizontalSectionHeader(
 @Composable
 fun ProductsDisplay(
     topProducts: List<Product>,
+    featuredProductGroups: List<ProductGroup>,
+    selectedFeaturedProductGroupId: Long?,
     promotions: List<Promotion>,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
-    onProductInDisplaySelect: (Long) -> Unit
+    onProductInDisplaySelect: (Long) -> Unit,
+    onFeaturedProductGroupSelect: (Long) -> Unit
 ) {
     val topProductsLazyRowState = rememberLazyListState()
     val promotionsLazyRowState = rememberLazyListState()
@@ -187,7 +189,7 @@ fun ProductsDisplay(
             }
         }
         item {
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(16.dp))
         }
         item {
             HorizontalSectionHeader(
@@ -211,55 +213,25 @@ fun ProductsDisplay(
                 }
             }
         }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                item {
+                    FeaturedProductGroups(
+                        featuredProductGroups,
+                        selectedFeaturedProductGroupId,
+                        onFeaturedProductGroupSelect
+                    )
+                }
+            }
+        }
     }
-}
-
-@Composable
-fun ProductImage(
-    imageUrl: String,
-    contentDescription: String?,
-    modifier: Modifier = Modifier,
-    shape: Shape = RectangleShape,
-    elevation: Dp = 0.dp
-) {
-    NiftySurface(
-        backgroundColor = Color.LightGray,
-        elevation = elevation,
-        shape = shape,
-        modifier = modifier
-    ) {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
-                .crossfade(true)
-                .build(),
-            contentDescription = contentDescription,
-            modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
-        )
-    }
-}
-
-@Composable
-fun ProductFoundation(
-    modifier: Modifier = Modifier,
-    shape: Shape = MaterialTheme.shapes.medium,
-    color: Color = ThemeElements.colors.primaryBackgroundColor,
-    contentColor: Color = ThemeElements.colors.primaryTextColor,
-    border: BorderStroke? = null,
-    elevation: Dp = 4.dp,
-    content: @Composable () -> Unit
-) {
-    NiftySurface(
-        modifier = modifier,
-        shape = shape,
-        backgroundColor = color,
-        contentColor = contentColor,
-        elevation = elevation,
-        border = border,
-        cornerSize = 8.dp,
-        content = content
-    )
 }
 
 @Composable
@@ -290,124 +262,3 @@ fun NiftySurface(
     }
 }
 
-@Composable
-private fun ProductCard(
-    product: Product,
-    onProductClick: (Long) -> Unit,
-    index: Int,
-    modifier: Modifier = Modifier
-) {
-    ProductFoundation(
-        modifier = modifier
-            .size(
-                width = 120.dp,
-                height = 170.dp
-            )
-            .padding(bottom = 16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .clickable(onClick = { onProductClick(product.id) })
-                .fillMaxSize()
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(90.dp)
-                    .fillMaxWidth()
-                    .padding(4.dp)
-            ) {
-                ProductImage(
-                    imageUrl = product.imageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(120.dp)
-                        .align(Alignment.BottomCenter)
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = product.name,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                style = TextStyle(
-                    color = ThemeElements.colors.primaryTextColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = "$CURRENCY_SIGN ${product.price.toFloat()}",
-                maxLines = 1,
-                style = TextStyle(
-                    color = ThemeElements.colors.accentColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-        }
-    }
-}
-
-@Composable
-private fun PromotionCard(
-    promotion: Promotion,
-    onProductClick: (Long) -> Unit,
-    index: Int,
-    modifier: Modifier = Modifier
-) {
-    ProductFoundation(
-        modifier = modifier
-            .size(
-                width = 120.dp,
-                height = 170.dp
-            )
-            .padding(bottom = 16.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .clickable(onClick = { onProductClick(promotion.productId) })
-                .fillMaxSize()
-        ) {
-            Box(
-                modifier = Modifier
-                    .height(90.dp)
-                    .fillMaxWidth()
-                    .padding(4.dp)
-            ) {
-                ProductImage(
-                    imageUrl = promotion.imageUrl,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(120.dp)
-                        .align(Alignment.BottomCenter)
-                )
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = promotion.name,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                style = TextStyle(
-                    color = ThemeElements.colors.primaryTextColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-            Spacer(modifier = Modifier.height(2.dp))
-            Text(
-                text = "$CURRENCY_SIGN ${promotion.price.toFloat()}",
-                maxLines = 1,
-                style = TextStyle(
-                    color = ThemeElements.colors.accentColor,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                modifier = Modifier.padding(horizontal = 4.dp)
-            )
-        }
-    }
-}

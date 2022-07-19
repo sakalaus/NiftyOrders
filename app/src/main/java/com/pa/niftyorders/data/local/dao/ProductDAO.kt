@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
+import com.pa.niftyorders.domain.model.entities.ProductGroup
 import com.pa.niftyorders.domain.model.entities.Promotion
 import java.math.BigDecimal
 
@@ -15,6 +16,15 @@ interface ProductDAO {
     @Query("Select * from Product")
     suspend fun getAllProducts(): List<Product>
 
+    @Query("Select * from Product where groupId = :groupId")
+    suspend fun getProductsInGroup(groupId: Long): List<Product>
+
+    @Query("Select * from ProductGroup")
+    suspend fun getAllProductGroups(): List<ProductGroup>
+
+    @Query("Select * from ProductGroup where featured")
+    suspend fun getFeaturedProductGroups(): List<ProductGroup>
+
     @Query("Select * from Promotion")
     suspend fun getAllPromotions(): List<Promotion>
 
@@ -23,6 +33,9 @@ interface ProductDAO {
 
     @Query("Delete from Product")
     suspend fun deleteAllProducts(): Unit
+
+    @Query("Delete from ProductGroup")
+    suspend fun deleteAllProductGroups(): Unit
 
     @Query("Delete from Promotion")
     suspend fun deleteAllPromotions(): Unit
@@ -38,6 +51,9 @@ interface ProductDAO {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createProducts(products: List<Product>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun createProductGroups(products: List<ProductGroup>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun createPromotions(products: List<Promotion>)

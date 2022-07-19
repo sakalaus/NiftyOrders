@@ -3,9 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/java/com/pa/niftyorders/ui/components/featuredgroups/FeaturedProductGroups.kt" value="0.7537037037037037" />
         <entry key="app/src/main/java/com/pa/niftyorders/ui/screens/addToCart/AddToCartScreen.kt" value="0.29508196721311475" />
         <entry key="app/src/main/java/com/pa/niftyorders/ui/screens/cart/CartScreen.kt" value="0.335" />
-        <entry key="app/src/main/java/com/pa/niftyorders/ui/screens/shopwindow/ShopWindowScreens.kt" value="0.25" />
+        <entry key="app/src/main/java/com/pa/niftyorders/ui/screens/shopwindow/ShopWindowScreens.kt" value="0.375" />
         <entry key="app/src/main/res/drawable/my_orders.xml" value="0.1" />
       </map>
     </option>

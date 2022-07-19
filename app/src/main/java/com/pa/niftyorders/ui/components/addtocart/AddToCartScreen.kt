@@ -1,4 +1,4 @@
-package com.pa.niftyorders.ui.screens.addToCart
+package com.pa.niftyorders.ui.components.addtocart
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

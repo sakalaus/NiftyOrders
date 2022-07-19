@@ -80,6 +80,13 @@ fun ShopWindowRoute(
                     )
                 )
             },
+            onFeaturedProductGroupSelect = { productGroupId ->
+                viewModel.onEvent(
+                    ShopWindowEvent.FeaturedProductGroupSelect(
+                        productGroupId = productGroupId
+                    )
+                )
+            },
             onAddToCart = { cartLine ->
                 viewModel.onEvent(
                     ShopWindowEvent.ProductAddToCart(
@@ -107,6 +114,7 @@ private fun ShopWindowRoute(
     onQuantityDecrease: (Long?) -> Unit,
     onAddToCart: (CartLine) -> Unit,
     onProductInDisplaySelect: (Long) -> Unit,
+    onFeaturedProductGroupSelect: (Long) -> Unit,
     onDismissAddToCart: () -> Unit
 ) {
     val shopWindowScreenType = getScreenType(
@@ -123,6 +131,7 @@ private fun ShopWindowRoute(
             onQuantityIncrease = onQuantityIncrease,
             onQuantityDecrease = onQuantityDecrease,
             onProductInDisplaySelect = onProductInDisplaySelect,
+            onFeaturedProductGroupSelect = onFeaturedProductGroupSelect,
             onAddToCart = onAddToCart,
             onDismissAddToCart = onDismissAddToCart
         )

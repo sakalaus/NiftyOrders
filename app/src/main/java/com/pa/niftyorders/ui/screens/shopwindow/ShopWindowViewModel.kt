@@ -36,9 +36,16 @@ class ShopWindowViewModel @Inject constructor(
             val promotions = orderUseCases.getPromotions()
             uiState = uiState.copy(promotions = promotions)
         }
-        if (uiState.topProducts.isEmpty()){
-          //createDemoData()
+        viewModelScope.launch {
+            val featuredProductGroups = orderUseCases.getFeaturedProductGroups()
+            uiState = uiState.copy(featuredProductGroups = featuredProductGroups)
         }
+        if (uiState.topProducts.isEmpty()) {
+            createDemoData()
+        }
+
+        //createDemoData()
+
     }
 
     private suspend fun refreshCartData(getProductsInCart: OrderUseCases): Pair<List<CartLine>, BigDecimal> {
@@ -67,6 +74,9 @@ class ShopWindowViewModel @Inject constructor(
             is ShopWindowEvent.ProductInDisplaySelect -> startAddToCartDialog(
                 productId = event.productId
             )
+            is ShopWindowEvent.FeaturedProductGroupSelect -> selectFeaturedProductGroup(
+                productGroupId = event.productGroupId
+            )
             is ShopWindowEvent.ProductAddToCart -> addProductToCart(
                 cartLine = event.cartLine
             )
@@ -75,10 +85,12 @@ class ShopWindowViewModel @Inject constructor(
         }
     }
 
-    private fun startAddToCartDialog(
-        productId: Long
-    ){
-        val selectedProduct = uiState.products.first{ it.id == productId }
+    private fun selectFeaturedProductGroup(productGroupId: Long) {
+        uiState = uiState.copy(selectedFeaturedProductGroupId = productGroupId)
+    }
+
+    private fun startAddToCartDialog(productId: Long) {
+        val selectedProduct = uiState.products.first { it.id == productId }
         val pendingCartLine = CartLine(
             name = selectedProduct.name,
             productId = selectedProduct.id,
@@ -94,7 +106,7 @@ class ShopWindowViewModel @Inject constructor(
         )
     }
 
-    private fun dismissAddToCartDialog(){
+    private fun dismissAddToCartDialog() {
         uiState = uiState.copy(
             addToCartDialogOpen = false,
             selectedProduct = null,
@@ -102,7 +114,7 @@ class ShopWindowViewModel @Inject constructor(
         )
     }
 
-    private fun addProductToCart(cartLine: CartLine){
+    private fun addProductToCart(cartLine: CartLine) {
         viewModelScope.launch {
             orderUseCases.addProductToCart(cartLine)
             val (productsInCart, productsTotalPrice) = refreshCartData(orderUseCases)
@@ -114,19 +126,23 @@ class ShopWindowViewModel @Inject constructor(
     private fun changeQuantityInCart(cartLineId: Long?, changeBy: Int) {
         // cartLineId == -1L - the line has not been added to cart
         // no need to update DB, only state is updated
-        if (cartLineId == null){
+        if (cartLineId == null) {
             uiState = uiState.copy(
                 pendingCartLine = uiState.pendingCartLine!!.copy(
                     quantity = uiState.pendingCartLine!!.quantity + changeBy,
                     totalPrice = uiState.pendingCartLine!!.totalPrice + BigDecimal(changeBy) * uiState.pendingCartLine!!.price
                 )
             )
-        }
-        else{
+        } else {
             viewModelScope.launch {
-                orderUseCases.changeQuantityInCart(uiState.productsInCart, cartLineId = cartLineId, changeQuantityBy = changeBy)
+                orderUseCases.changeQuantityInCart(
+                    uiState.productsInCart,
+                    cartLineId = cartLineId,
+                    changeQuantityBy = changeBy
+                )
                 val (productsInCart, productsTotalPrice) = refreshCartData(orderUseCases)
-                uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
+                uiState =
+                    uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
             }
         }
     }
