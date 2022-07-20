@@ -36,6 +36,7 @@ import com.pa.niftyorders.ui.components.featuredgroups.FeaturedProductGroups
 import com.pa.niftyorders.ui.components.productcard.ProductCard
 import com.pa.niftyorders.ui.components.promotioncard.PromotionCard
 import com.pa.niftyorders.ui.components.addtocart.AddToCartDialog
+import com.pa.niftyorders.ui.components.productgrid.ProductGrid
 import com.pa.niftyorders.ui.theme.ThemeElements
 import kotlinx.coroutines.CoroutineScope
 
@@ -239,19 +240,10 @@ fun ProductsDisplay(
             Spacer(modifier = Modifier.height(16.dp))
         }
         item {
-            LazyVerticalGrid(
+            ProductGrid(
                 modifier = Modifier.fillParentMaxWidth().fillParentMaxHeight(),
-                cells = GridCells.Adaptive(minSize = 130.dp)
-            ){
-                items(count = productsInFeaturedGroup.size) { index ->
-                    ProductCard(
-                        modifier = Modifier.padding(4.dp),
-                        index = index,
-                        product = productsInFeaturedGroup[index],
-                        onProductClick = onProductInDisplaySelect
-                    )
-                }
-            }
+                productsInFeaturedGroup = productsInFeaturedGroup,
+                onProductInDisplaySelect = onProductInDisplaySelect)
         }
     }
 }
