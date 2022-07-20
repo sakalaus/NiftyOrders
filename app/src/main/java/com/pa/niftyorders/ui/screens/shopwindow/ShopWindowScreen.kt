@@ -1,9 +1,6 @@
 package com.pa.niftyorders.ui.screens.shopwindow
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -36,24 +34,64 @@ import com.pa.niftyorders.ui.components.featuredgroups.FeaturedProductGroups
 import com.pa.niftyorders.ui.components.productcard.ProductCard
 import com.pa.niftyorders.ui.components.promotioncard.PromotionCard
 import com.pa.niftyorders.ui.components.addtocart.AddToCartDialog
+import com.pa.niftyorders.ui.components.basic.NiftySurface
 import com.pa.niftyorders.ui.components.productgrid.ProductGrid
 import com.pa.niftyorders.ui.theme.ThemeElements
 import kotlinx.coroutines.CoroutineScope
 
 @Composable
-fun ShopWindowScreen() {
-    Text("Shop window screen")
-}
-
-@Composable
-fun ShopWindowScreenWithCartScreen(
+fun ShopWindowScreen(
     uiState: ShopWindowState,
     appState: NiftyOrdersAppState,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long?) -> Unit,
     onQuantityDecrease: (Long?) -> Unit,
-    onProductInDisplaySelect: (Long) -> Unit,
+    onFeaturedProductGroupSelect: (Long) -> Unit,
+    onAddToCart: (CartLine) -> Unit,
+    onDismissAddToCart: () -> Unit
+) {
+
+    val scaffoldState = rememberScaffoldState()
+    val scrollState = rememberScrollState()
+
+    if (uiState.addToCartDialogOpen) {
+        AddToCartDialog(
+            product = uiState.selectedProduct!!,
+            cartLine = uiState.pendingCartLine!!,
+            onQuantityIncrease = onQuantityIncrease,
+            onQuantityDecrease = onQuantityDecrease,
+            onAddToCart = onAddToCart,
+            onDismissAddToCart = onDismissAddToCart
+        )
+    }
+    NiftySurface(
+        backgroundColor = ThemeElements.colors.secondaryBackgroundColor,
+        elevation = 2.dp,
+        shape = RectangleShape,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        ProductsDisplay(
+            topProducts = uiState.topProducts,
+            productsInFeaturedGroup = uiState.productsInFeaturedGroup,
+            promotions = uiState.promotions,
+            featuredProductGroups = uiState.featuredProductGroups,
+            selectedFeaturedProductGroupId = uiState.selectedFeaturedProductGroupId,
+            doScroll = doScroll,
+            onProductInDisplaySelect = onProductClick,
+            onFeaturedProductGroupSelect = onFeaturedProductGroupSelect
+        )
+    }
+
+}
+
+@Composable
+fun ShopWindowScreenWithCartScreen(
+    uiState: ShopWindowState,
+    doScroll: (LazyListState, CoroutineScope) -> Unit,
+    onProductClick: (Long) -> Unit,
+    onQuantityIncrease: (Long?) -> Unit,
+    onQuantityDecrease: (Long?) -> Unit,
     onFeaturedProductGroupSelect: (Long) -> Unit,
     onAddToCart: (CartLine) -> Unit,
     onDismissAddToCart: () -> Unit
@@ -142,7 +180,6 @@ fun HorizontalSectionHeader(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductsDisplay(
     topProducts: List<Product>,
@@ -162,7 +199,6 @@ fun ProductsDisplay(
             if (topProductsLazyRowState.firstVisibleItemIndex == 0) Icons.Outlined.ArrowForward else Icons.Outlined.ArrowBack
         }
     }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -241,38 +277,14 @@ fun ProductsDisplay(
         }
         item {
             ProductGrid(
-                modifier = Modifier.fillParentMaxWidth().fillParentMaxHeight(),
+                modifier = Modifier
+                    .fillParentMaxWidth()
+                    .fillParentMaxHeight(),
                 productsInFeaturedGroup = productsInFeaturedGroup,
-                onProductInDisplaySelect = onProductInDisplaySelect)
+                onProductInDisplaySelect = onProductInDisplaySelect
+            )
         }
     }
 }
 
-@Composable
-fun NiftySurface(
-    backgroundColor: Color,
-    elevation: Dp,
-    shape: Shape,
-    contentColor: Color = ThemeElements.colors.secondaryTintColor,
-    contentAlignment: Alignment = Alignment.TopStart,
-    border: BorderStroke? = null,
-    cornerSize: Dp = 0.dp,
-    modifier: Modifier,
-    content: @Composable () -> Unit
-) {
-    Box(
-        modifier = modifier
-            .shadow(elevation = elevation, shape = shape, clip = false)
-            .zIndex(elevation.value)
-            .clip(RoundedCornerShape(cornerSize))
-            .then(if (border != null) Modifier.border(border, shape) else Modifier)
-            .background(
-                color = backgroundColor,
-                shape = shape
-            ),
-        contentAlignment = contentAlignment
-    ) {
-        CompositionLocalProvider(LocalContentColor provides contentColor, content = content)
-    }
-}
 

@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.pa.niftyorders.domain.model.entities.Product
-import com.pa.niftyorders.ui.screens.shopwindow.NiftySurface
+import com.pa.niftyorders.ui.components.basic.NiftySurface
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN
 

@@ -26,7 +26,7 @@ import com.pa.niftyorders.R
 import com.pa.niftyorders.data.repository_mock.sampleCart
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.ui.components.productcard.ProductImage
-import com.pa.niftyorders.ui.screens.shopwindow.NiftySurface
+import com.pa.niftyorders.ui.components.basic.NiftySurface
 import com.pa.niftyorders.ui.theme.NiftyOrdersTheme
 import com.pa.niftyorders.ui.theme.ThemeElements
 import com.pa.niftyorders.utils.CURRENCY_SIGN

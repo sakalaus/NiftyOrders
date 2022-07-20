@@ -23,6 +23,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
+fun BottomBar(
+    appState: NiftyOrdersAppState
+) {
+    BottomAppBar(
+        modifier = Modifier.fillMaxSize(),
+        backgroundColor = ThemeElements.colors.primaryBackgroundColor,
+        contentColor = ThemeElements.colors.buttonCaptionColor,
+        elevation = 4.dp
+    ) {
+        appState.tabs.forEach { tab ->
+            Text(tab.name)
+        }
+    }
+}
+
+@Composable
 fun ShopWindowRoute(
     viewModel: ShopWindowViewModel = hiltViewModel(),
     appState: NiftyOrdersAppState,
@@ -31,76 +47,66 @@ fun ShopWindowRoute(
 
     val uiState = viewModel.uiState
 
-    Scaffold(
-        scaffoldState = appState.scaffoldState,
-        drawerGesturesEnabled = true,
-        drawerContent = {
-            DrawerContent(
-                appState = appState,
-                demoDataCreation = { viewModel.onEvent(ShopWindowEvent.DemoDataCreation) }
+    ShopWindowRoute(
+        uiState = uiState,
+        appState = appState,
+        isExpandedScreen = isExpandedScreen,
+        doScroll = { lazyListState, coroutineScope ->
+            viewModel.onEvent(
+                ShopWindowEvent.ProductRowScroll(
+                    lazyListState = lazyListState,
+                    coroutineScope = coroutineScope
+                )
             )
-        }) {
-        ShopWindowRoute(
-            uiState = uiState,
-            appState = appState,
-            isExpandedScreen = isExpandedScreen,
-            doScroll = { lazyListState, coroutineScope ->
-                viewModel.onEvent(
-                    ShopWindowEvent.ProductRowScroll(
-                        lazyListState = lazyListState,
-                        coroutineScope = coroutineScope
-                    )
+        },
+        onProductClick = { productId ->
+            viewModel.onEvent(
+                ShopWindowEvent.ProductInDisplaySelect(
+                    productId = productId
                 )
-            },
-            onProductClick = { productId ->
-                viewModel.onEvent(
-                    ShopWindowEvent.ProductInDisplaySelect(
-                        productId = productId
-                    )
+            )
+        },
+        onQuantityIncrease = { cartLineId ->
+            viewModel.onEvent(
+                ShopWindowEvent.CartQuantityIncrease(
+                    cartLineId = cartLineId
                 )
-            },
-            onQuantityIncrease = { cartLineId ->
-                viewModel.onEvent(
-                    ShopWindowEvent.CartQuantityIncrease(
-                        cartLineId = cartLineId
-                    )
+            )
+        },
+        onQuantityDecrease = { cartLineId ->
+            viewModel.onEvent(
+                ShopWindowEvent.CartQuantityDecrease(
+                    cartLineId = cartLineId
                 )
-            },
-            onQuantityDecrease = { cartLineId ->
-                viewModel.onEvent(
-                    ShopWindowEvent.CartQuantityDecrease(
-                        cartLineId = cartLineId
-                    )
+            )
+        },
+        onProductInDisplaySelect = { productId ->
+            viewModel.onEvent(
+                ShopWindowEvent.ProductInDisplaySelect(
+                    productId = productId
                 )
-            },
-            onProductInDisplaySelect = { productId ->
-                viewModel.onEvent(
-                    ShopWindowEvent.ProductInDisplaySelect(
-                        productId = productId
-                    )
+            )
+        },
+        onFeaturedProductGroupSelect = { productGroupId ->
+            viewModel.onEvent(
+                ShopWindowEvent.FeaturedProductGroupSelect(
+                    productGroupId = productGroupId
                 )
-            },
-            onFeaturedProductGroupSelect = { productGroupId ->
-                viewModel.onEvent(
-                    ShopWindowEvent.FeaturedProductGroupSelect(
-                        productGroupId = productGroupId
-                    )
+            )
+        },
+        onAddToCart = { cartLine ->
+            viewModel.onEvent(
+                ShopWindowEvent.ProductAddToCart(
+                    cartLine = cartLine
                 )
-            },
-            onAddToCart = { cartLine ->
-                viewModel.onEvent(
-                    ShopWindowEvent.ProductAddToCart(
-                        cartLine = cartLine
-                    )
-                )
-            },
-            onDismissAddToCart = {
-                viewModel.onEvent(
-                    ShopWindowEvent.AddToCartDismiss
-                )
-            }
-        )
-    }
+            )
+        },
+        onDismissAddToCart = {
+            viewModel.onEvent(
+                ShopWindowEvent.AddToCartDismiss
+            )
+        }
+    )
 }
 
 @Composable
@@ -124,18 +130,26 @@ private fun ShopWindowRoute(
 
     when (shopWindowScreenType) {
         ShopWindowScreenType.ShopWindowScreenWithCart -> ShopWindowScreenWithCartScreen(
-            appState = appState,
-            doScroll = doScroll,
             uiState = uiState,
+            doScroll = doScroll,
             onProductClick = onProductClick,
             onQuantityIncrease = onQuantityIncrease,
             onQuantityDecrease = onQuantityDecrease,
-            onProductInDisplaySelect = onProductInDisplaySelect,
             onFeaturedProductGroupSelect = onFeaturedProductGroupSelect,
             onAddToCart = onAddToCart,
             onDismissAddToCart = onDismissAddToCart
         )
-        ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen()
+        ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen(
+            appState = appState,
+            uiState = uiState,
+            doScroll = doScroll,
+            onProductClick = onProductClick,
+            onQuantityIncrease = onQuantityIncrease,
+            onQuantityDecrease = onQuantityDecrease,
+            onFeaturedProductGroupSelect = onFeaturedProductGroupSelect,
+            onAddToCart = onAddToCart,
+            onDismissAddToCart = onDismissAddToCart
+        )
         ShopWindowScreenType.CartScreen -> CartScreen(
             productsInCart = uiState.productsInCart,
             cartTotal = uiState.cartTotal,
@@ -143,7 +157,6 @@ private fun ShopWindowRoute(
             onQuantityIncrease = onQuantityIncrease,
             onQuantityDecrease = onQuantityDecrease
         )
-
     }
 }
 
