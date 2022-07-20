@@ -9,8 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.use_cases.OrderUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.math.BigDecimal
 import javax.inject.Inject
 
@@ -24,24 +23,26 @@ class ShopWindowViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val topProducts = orderUseCases.getTopProducts()
-            uiState = uiState.copy(topProducts = topProducts)
-            uiState = uiState.copy(products = topProducts) // TODO Change
-        }
-        viewModelScope.launch {
-            val (productsInCart, productsTotalPrice) = refreshCartData(orderUseCases)
-            uiState = uiState.copy(productsInCart = productsInCart, cartTotal = productsTotalPrice)
-        }
-        viewModelScope.launch {
-            val promotions = orderUseCases.getPromotions()
-            uiState = uiState.copy(promotions = promotions)
-        }
-        viewModelScope.launch {
-            val featuredProductGroups = orderUseCases.getFeaturedProductGroups()
-            uiState = uiState.copy(featuredProductGroups = featuredProductGroups)
-        }
-        if (uiState.topProducts.isEmpty()) {
-            createDemoData()
+            val topProducts = async { orderUseCases.getTopProducts() }
+            val promotions = async { orderUseCases.getPromotions() }
+            val featuredProductGroups = async { orderUseCases.getFeaturedProductGroups() }
+            val deferredCartData  = async { refreshCartData(orderUseCases)  }
+
+            uiState = uiState.copy(
+                topProducts = topProducts.await(),
+                featuredProductGroups = featuredProductGroups.await(),
+                products = topProducts.await(),
+                promotions = promotions.await(),
+                productsInCart = deferredCartData.await().first,
+                cartTotal  = deferredCartData.await().second
+            )
+
+            if (uiState.featuredProductGroups.isNotEmpty() && uiState.selectedFeaturedProductGroupId == null) {
+                uiState =
+                    uiState.copy(selectedFeaturedProductGroupId = uiState.featuredProductGroups.first().id)
+                selectFeaturedProductGroup(uiState.selectedFeaturedProductGroupId!!)
+            }
+
         }
 
         //createDemoData()
@@ -86,7 +87,13 @@ class ShopWindowViewModel @Inject constructor(
     }
 
     private fun selectFeaturedProductGroup(productGroupId: Long) {
-        uiState = uiState.copy(selectedFeaturedProductGroupId = productGroupId)
+        viewModelScope.launch {
+            uiState = uiState.copy(selectedFeaturedProductGroupId = productGroupId)
+            uiState.selectedFeaturedProductGroupId?.let {
+                uiState =
+                    uiState.copy(productsInFeaturedGroup = orderUseCases.getProductsInGroup(it))
+            }
+        }
     }
 
     private fun startAddToCartDialog(productId: Long) {

@@ -1,6 +1,7 @@
 package com.pa.niftyorders.ui.screens.shopwindow
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -75,6 +76,7 @@ fun ShopWindowScreenWithCartScreen(
         ) {
             ProductsDisplay(
                 topProducts = uiState.topProducts,
+                productsInFeaturedGroup = uiState.productsInFeaturedGroup,
                 promotions = uiState.promotions,
                 featuredProductGroups = uiState.featuredProductGroups,
                 selectedFeaturedProductGroupId = uiState.selectedFeaturedProductGroupId,
@@ -139,10 +141,12 @@ fun HorizontalSectionHeader(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductsDisplay(
     topProducts: List<Product>,
     featuredProductGroups: List<ProductGroup>,
+    productsInFeaturedGroup: List<Product>,
     selectedFeaturedProductGroupId: Long?,
     promotions: List<Promotion>,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
@@ -189,7 +193,7 @@ fun ProductsDisplay(
             }
         }
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(2.dp))
         }
         item {
             HorizontalSectionHeader(
@@ -214,7 +218,7 @@ fun ProductsDisplay(
             }
         }
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(8.dp))
         }
         item {
             LazyColumn(
@@ -227,6 +231,24 @@ fun ProductsDisplay(
                         featuredProductGroups,
                         selectedFeaturedProductGroupId,
                         onFeaturedProductGroupSelect
+                    )
+                }
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            LazyVerticalGrid(
+                modifier = Modifier.fillParentMaxWidth().fillParentMaxHeight(),
+                cells = GridCells.Adaptive(minSize = 130.dp)
+            ){
+                items(count = productsInFeaturedGroup.size) { index ->
+                    ProductCard(
+                        modifier = Modifier.padding(4.dp),
+                        index = index,
+                        product = productsInFeaturedGroup[index],
+                        onProductClick = onProductInDisplaySelect
                     )
                 }
             }

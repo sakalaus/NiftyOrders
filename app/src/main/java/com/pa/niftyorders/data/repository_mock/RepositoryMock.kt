@@ -94,7 +94,7 @@ val sampleProductGroups = listOf(
 val sampleProducts = listOf(
     Product(
         id = 1,
-        groupId = 1,
+        groupId = 2,
         name = "Adgeeka hot as the devil's toe, are you friend or foe",
         price = BigDecimal(200.99),
         description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3] The bees work together as a group with the regurgitation and digestion for as long as 20 minutes, passing the nectar from one bee to the next, until the product reaches the honeycombs in storage quality.[16] It is then placed in honeycomb cells and left unsealed while still high in water content (about 50 to 70%) and natural yeasts which, unchecked, would cause the sugars in the newly formed honey to ferment.[21] Bees are among the few insects that can generate large amounts of body heat, and the hive bees constantly regulate the hive temperature, either heating with their bodies or cooling with water evaporation, to maintain a fairly constant temperature of about 35 °C (95 °F) in the honey-storage areas. The process continues as hive bees flutter their wings constantly to circulate air and evaporate water from the honey to a content around 18%, raising the sugar concentration beyond the saturation point and preventing fermentation.[15][16] The bees then cap the cells with wax to seal them.[16] As removed from the hive by a beekeeper, honey has a long shelf life and will not ferment if properly sealed.[15]\n" +
@@ -106,7 +106,7 @@ val sampleProducts = listOf(
     ),
     Product(
         id = 2,
-        groupId = 1,
+        groupId = 2,
         name = "Mojito with a touch of rum",
         description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3] The bees work together as a group with the regurgitation and digestion for as long as 20 minutes, passing the nectar from one bee to the next, until the product reaches the honeycombs in storage quality.[16] It is then placed in honeycomb cells and left unsealed while still high in water content (about 50 to 70%) and natural yeasts which, unchecked, would cause the sugars in the newly formed honey to ferment.[21] Bees are among the few insects that can generate large amounts of body heat, and the hive bees constantly regulate the hive temperature, either heating with their bodies or cooling with water evaporation, to maintain a fairly constant temperature of about 35 °C (95 °F) in the honey-storage areas. The process continues as hive bees flutter their wings constantly to circulate air and evaporate water from the honey to a content around 18%, raising the sugar concentration beyond the saturation point and preventing fermentation.[15][16] The bees then cap the cells with wax to seal them.[16] As removed from the hive by a beekeeper, honey has a long shelf life and will not ferment if properly sealed.[15]\n" +
                 "\n" +
@@ -118,7 +118,7 @@ val sampleProducts = listOf(
     ),
     Product(
         id = 3,
-        groupId = 1,
+        groupId = 2,
         name = "Paella de mariscos valenciana",
         description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3] The bees work together as a group with the regurgitation and digestion for as long as 20 minutes, passing the nectar from one bee to the next, until the product reaches the honeycombs in storage quality.[16] It is then placed in honeycomb cells and left unsealed while still high in water content (about 50 to 70%) and natural yeasts which, unchecked, would cause the sugars in the newly formed honey to ferment.[21] Bees are among the few insects that can generate large amounts of body heat, and the hive bees constantly regulate the hive temperature, either heating with their bodies or cooling with water evaporation, to maintain a fairly constant temperature of about 35 °C (95 °F) in the honey-storage areas. The process continues as hive bees flutter their wings constantly to circulate air and evaporate water from the honey to a content around 18%, raising the sugar concentration beyond the saturation point and preventing fermentation.[15][16] The bees then cap the cells with wax to seal them.[16] As removed from the hive by a beekeeper, honey has a long shelf life and will not ferment if properly sealed.[15]\n" +
                 "\n" +
@@ -187,7 +187,178 @@ val sampleProducts = listOf(
         description = "Honey is a sweet, viscous food substance made by honey bees and some other bees.[1][2] Bees produce honey from the sugary secretions of plants (floral nectar) or from secretions of other insects (such as honeydew), by regurgitation, enzymatic activity, and water evaporation. Honey bees store honey in wax structures called honeycombs, whereas stingless bees store honey in pots made of wax and resin.[1][2][3] Honey gets its sweetness from the monosaccharides fructose and glucose, and has about the same relative sweetness as sucrose (table sugar).[5][6] Fifteen millilitres (1 US tablespoon) of honey provides around 190 kilojoules (46 kilocalories) of food energy.[7] It has attractive chemical properties for baking and a distinctive flavor when used as a sweetener.[5] Most microorganisms do not grow in honey, so sealed honey does not spoil, even after thousands of years.[8][9][10]",
         price = BigDecimal(99.99),
         imageUrl = "https://assets.tmecosys.com/image/upload/t_web767x639/img/recipe/ras/Assets/f3d7d1b4-4df6-4d72-b2f0-acf05cccae08/Derivates/4513fa48-f03c-4f8e-bea0-18385dd4bdd0.jpg"
-    )
+    ),
+    Product(
+        id = 10,
+        groupId = 1,
+        name = "Boston cake",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-tasty-chocolate-truffle-past0162choc-A_0.jpg"
+    ),
+    Product(
+        id = 11,
+        groupId = 1,
+        name = "Butterscotch top notch",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-enchanting-butterscotch-pastries-past0213butt-A_0.jpg"
+    ),
+    Product(
+        id = 12,
+        groupId = 1,
+        name = "Velvet cakes mama bakes",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-six-assorted-red-velvet-chocolate-and-pineapple-pastries-past2343flav-A_0.jpg"
+    ),
+    Product(
+        id = 13,
+        groupId = 1,
+        name = "Choco chip don't slip",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-choco-chip-truffle-n-kit-kat-delight-pastries-past2310flav-A_0.jpg"
+    ),
+    Product(
+        id = 14,
+        groupId = 1,
+        name = "Mango pastry rattatasty",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/squ-satiating-mango-pastries-past0210mang-A_0.jpg"
+    ),
+    Product(
+        id = 15,
+        groupId = 1,
+        name = "Happy pastry not so badsty",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-set-of-two-happy-birthday-pastry-past2345choc-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 16,
+        groupId = 1,
+        name = "Pineapple rounds with no bounds",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-delish-pineapple-pastries-past0212pine-A_1.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 17,
+        groupId = 1,
+        name = "Drool worthy makes you thirsty",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-drool-worthy-chocolate-and-butterscotch-pateries-past2344flav-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 18,
+        groupId = 1,
+        name = "Black forest take a rest",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-extravagant-blackforest-past0159blac-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 19,
+        groupId = 1,
+        name = "Choco chip beep beep",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-first-birthday-theme-cake-them1748flav-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 20,
+        groupId = 1,
+        name = "Choco mud makes you glad",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-stellar-chocolate-pastries-past0204choc-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 21,
+        groupId = 1,
+        name = "Kitkat chocolate cake",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-kitkat-chocolate-cake-cake1119choc-A_1.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 22,
+        groupId = 1,
+        name = "Round shaped Mickey",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-round-shaped-mickey-mouse-fondant-cake-them956flav-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 23,
+        groupId = 1,
+        name = "Doraemon cream cake",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-doraemon-cream-cake-them1046flav-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 24,
+        groupId = 1,
+        name = "Grizzly bear cream cake",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-bear-cream-cake-them1048flav-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 25,
+        groupId = 1,
+        name = "Character fondant cake",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-character-fondant-cake-them1292fav-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+    Product(
+        id = 26,
+        groupId = 1,
+        name = "Gorgeous lion cream cake",
+        description = "Pastry is baked food made with a dough of flour, water and shortening (solid fats, including butter or lard) that may be savoury or sweetened. Sweetened pastries are often described as bakers' confectionery. The word \"pastries\" suggests many kinds of baked products made from ingredients such as flour, sugar, milk, butter, shortening, baking powder, and eggs. Small tarts and other sweet baked products are called pastries. Common pastry dishes include pies, tarts, quiches, croissants, and pasties.[1][2]\n" +
+                "\n" +
+                "The French word pâtisserie is also used in English (with or without the accent) for the same foods. Originally, the French word pastisserie referred to anything, such as a meat pie, made in dough (paste, later pâte) and not typically a luxurious or sweet product.[3] This meaning still persisted in the nineteenth century, though by then the term more often referred to the sweet and often ornate confections implied today.",
+        price = BigDecimal(129.99),
+        imageUrl = "https://media.bakingo.com/sq-gorgeous-lion-cream-cake-them2120flav-A_0.jpg?tr=w-320,h-320,dpr-2,q-70"
+    ),
+
 )
 
 
