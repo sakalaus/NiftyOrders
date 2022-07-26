@@ -8,6 +8,8 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -36,6 +38,7 @@ fun NiftyOrdersScreen(windowSizeClass: WindowSizeClass) {
         )
 
         val isExpandedScreen = windowSizeClass == WindowSizeClass.Expanded
+        var isCartOpen = remember { mutableStateOf(false) }
 
         Scaffold(
             scaffoldState = appState.scaffoldState,
@@ -47,7 +50,9 @@ fun NiftyOrdersScreen(windowSizeClass: WindowSizeClass) {
                     }
                     Spacer(Modifier.weight(1f, true))
                     if (!isExpandedScreen){
-                        IconButton(onClick = {}) {
+                        IconButton(onClick = {
+                            isCartOpen.value    = !isCartOpen.value
+                        }) {
                             Icon(Icons.Filled.ShoppingCart, stringResource(R.string.cart))
                         }
                     }
@@ -66,6 +71,7 @@ fun NiftyOrdersScreen(windowSizeClass: WindowSizeClass) {
                 ) {
                     ShopWindowRoute(
                         appState = appState,
+                        isCartOpen  = isCartOpen.value,
                         isExpandedScreen = isExpandedScreen
                     )
                 }

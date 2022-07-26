@@ -13,6 +13,7 @@ sealed class ShopWindowEvent() {
     data class  ProductInCartSelect(val productId: Long): ShopWindowEvent()
     data class  CartQuantityIncrease(val cartLineId: Long?): ShopWindowEvent()
     data class  CartQuantityDecrease(val cartLineId: Long?): ShopWindowEvent()
+    object ToggleCartOpen: ShopWindowEvent()
     object DemoDataCreation: ShopWindowEvent()
     object AddToCartDismiss: ShopWindowEvent()
 }

@@ -64,9 +64,10 @@ fun CartScreen(
             CartFooter(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .fillMaxHeight(),
+                    .wrapContentHeight(),
                 totalPrice = cartTotal
             )
+            Spacer(modifier = Modifier.height(56.dp))
         }
     }
 }
@@ -296,13 +297,14 @@ fun CartFooter(
             ) {
                 Row(
                     modifier = Modifier
+                        .padding(top = 4.dp)
                         .fillMaxWidth()
-                        .fillMaxHeight(0.5f),
+                        .wrapContentHeight(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
                             .wrapContentHeight()
                             .fillMaxWidth(0.5f),
                         horizontalAlignment = Alignment.Start,
@@ -319,8 +321,8 @@ fun CartFooter(
                     }
                     Column(
                         modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .fillMaxHeight()
+                            .padding(horizontal = 6.dp)
+                            .wrapContentHeight()
                             .fillMaxWidth(),
                         horizontalAlignment = Alignment.End,
                         verticalArrangement = Arrangement.Center
@@ -337,7 +339,7 @@ fun CartFooter(
                 }
                 Row(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(4.dp)
                         .fillMaxWidth()
                         .wrapContentHeight(),
                     verticalAlignment = Alignment.CenterVertically,

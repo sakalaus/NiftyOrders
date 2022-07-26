@@ -107,7 +107,7 @@ class ShopWindowViewModel @Inject constructor(
             totalPrice = selectedProduct.price
         )
         uiState = uiState.copy(
-            addToCartDialogOpen = true,
+            isAddToCartDialogOpen = true,
             selectedProduct = selectedProduct,
             pendingCartLine = pendingCartLine
         )
@@ -115,7 +115,7 @@ class ShopWindowViewModel @Inject constructor(
 
     private fun dismissAddToCartDialog() {
         uiState = uiState.copy(
-            addToCartDialogOpen = false,
+            isAddToCartDialogOpen = false,
             selectedProduct = null,
             pendingCartLine = null
         )

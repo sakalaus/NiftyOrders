@@ -42,6 +42,7 @@ fun BottomBar(
 fun ShopWindowRoute(
     viewModel: ShopWindowViewModel = hiltViewModel(),
     appState: NiftyOrdersAppState,
+    isCartOpen: Boolean,
     isExpandedScreen: Boolean
 ) {
 
@@ -50,6 +51,7 @@ fun ShopWindowRoute(
     ShopWindowRoute(
         uiState = uiState,
         appState = appState,
+        isCartOpen = isCartOpen,
         isExpandedScreen = isExpandedScreen,
         doScroll = { lazyListState, coroutineScope ->
             viewModel.onEvent(
@@ -114,6 +116,7 @@ private fun ShopWindowRoute(
     uiState: ShopWindowState,
     appState: NiftyOrdersAppState,
     isExpandedScreen: Boolean,
+    isCartOpen: Boolean,
     doScroll: (LazyListState, CoroutineScope) -> Unit,
     onProductClick: (Long) -> Unit,
     onQuantityIncrease: (Long?) -> Unit,
@@ -125,6 +128,7 @@ private fun ShopWindowRoute(
 ) {
     val shopWindowScreenType = getScreenType(
         isExpandedScreen = isExpandedScreen,
+        isCartOpen = isCartOpen,
         uiState = uiState
     )
 
@@ -254,12 +258,13 @@ private enum class ShopWindowScreenType {
 
 private fun getScreenType(
     isExpandedScreen: Boolean,
+    isCartOpen: Boolean,
     uiState: ShopWindowState
 ): ShopWindowScreenType {
     return when (isExpandedScreen) {
         true -> ShopWindowScreenType.ShopWindowScreenWithCart
         false -> {
-            if (uiState.isCartOpen) ShopWindowScreenType.CartScreen else ShopWindowScreenType.ShopWindowScreen
+            if (isCartOpen) ShopWindowScreenType.CartScreen else ShopWindowScreenType.ShopWindowScreen
         }
     }
 }

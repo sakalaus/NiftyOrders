@@ -4,7 +4,6 @@ import com.pa.niftyorders.domain.model.entities.CartLine
 import com.pa.niftyorders.domain.model.entities.Product
 import com.pa.niftyorders.domain.model.entities.ProductGroup
 import com.pa.niftyorders.domain.model.entities.Promotion
-import com.pa.niftyorders.domain.use_cases.GetFeaturedProductGroups
 import java.math.BigDecimal
 
 data class ShopWindowState(
@@ -20,7 +19,7 @@ data class ShopWindowState(
     val featuredGroups: List<Product> = emptyList(),
     val productsInCart: List<CartLine> = emptyList(),
     val pendingCartLine: CartLine? = null,
-    val addToCartDialogOpen: Boolean = false,
+    val isAddToCartDialogOpen: Boolean = false,
     val selectedProduct: Product? = null
 ) {
 }
