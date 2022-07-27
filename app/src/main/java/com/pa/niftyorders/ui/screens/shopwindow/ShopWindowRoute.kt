@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -107,7 +108,21 @@ fun ShopWindowRoute(
             viewModel.onEvent(
                 ShopWindowEvent.AddToCartDismiss
             )
-        }
+        },
+        onSearchFieldValueChange = { stringValue ->
+            viewModel.onEvent(
+                ShopWindowEvent.SearchFieldValueChange(
+                    value = stringValue
+                )
+            )
+        },
+        onSearchFieldFocusChange = { focusState ->
+            viewModel.onEvent(
+                ShopWindowEvent.SearchFieldFocusChanged(
+                    focusState = focusState
+                )
+            )
+        },
     )
 }
 
@@ -124,7 +139,9 @@ private fun ShopWindowRoute(
     onAddToCart: (CartLine) -> Unit,
     onProductInDisplaySelect: (Long) -> Unit,
     onFeaturedProductGroupSelect: (Long) -> Unit,
-    onDismissAddToCart: () -> Unit
+    onDismissAddToCart: () -> Unit,
+    onSearchFieldValueChange: (String) -> Unit,
+    onSearchFieldFocusChange: (FocusState) -> Unit
 ) {
     val shopWindowScreenType = getScreenType(
         isExpandedScreen = isExpandedScreen,
@@ -141,7 +158,9 @@ private fun ShopWindowRoute(
             onQuantityDecrease = onQuantityDecrease,
             onFeaturedProductGroupSelect = onFeaturedProductGroupSelect,
             onAddToCart = onAddToCart,
-            onDismissAddToCart = onDismissAddToCart
+            onDismissAddToCart = onDismissAddToCart,
+            onSearchFieldValueChange = onSearchFieldValueChange,
+            onSearchFieldFocusChange = onSearchFieldFocusChange
         )
         ShopWindowScreenType.ShopWindowScreen -> ShopWindowScreen(
             appState = appState,
@@ -152,7 +171,9 @@ private fun ShopWindowRoute(
             onQuantityDecrease = onQuantityDecrease,
             onFeaturedProductGroupSelect = onFeaturedProductGroupSelect,
             onAddToCart = onAddToCart,
-            onDismissAddToCart = onDismissAddToCart
+            onDismissAddToCart = onDismissAddToCart,
+            onSearchFieldValueChange = onSearchFieldValueChange,
+            onSearchFieldFocusChange = onSearchFieldFocusChange
         )
         ShopWindowScreenType.CartScreen -> CartScreen(
             productsInCart = uiState.productsInCart,

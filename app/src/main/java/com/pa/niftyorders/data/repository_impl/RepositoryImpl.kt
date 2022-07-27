@@ -1,5 +1,6 @@
 package com.pa.niftyorders.data.repository_impl
 
+import androidx.compose.ui.text.toLowerCase
 import com.pa.niftyorders.data.local.NiftyDataBase
 import com.pa.niftyorders.data.repository_mock.sampleCart
 import com.pa.niftyorders.data.repository_mock.sampleProductGroups
@@ -23,8 +24,8 @@ class RepositoryImpl @Inject constructor(
         return dao.getAllProducts()
     }
 
-    override suspend fun getProductsInGroup(groupId: Long): List<Product> {
-        return dao.getProductsInGroup(groupId)
+    override suspend fun getProductsInGroup(groupId: Long, searchString: String): List<Product> {
+        return dao.getProductsInGroup(groupId, searchString.lowercase())
     }
 
     override suspend fun getFeaturedProductGroups(): List<ProductGroup> {

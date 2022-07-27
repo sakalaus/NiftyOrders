@@ -16,8 +16,9 @@ interface ProductDAO {
     @Query("Select * from Product")
     suspend fun getAllProducts(): List<Product>
 
-    @Query("Select * from Product where groupId = :groupId")
-    suspend fun getProductsInGroup(groupId: Long): List<Product>
+    @Query("Select * from Product where groupId = :groupId " +
+            "AND LOWER(name) LIKE '%' || :searchString || '%'")
+    suspend fun getProductsInGroup(groupId: Long, searchString: String): List<Product>
 
     @Query("Select * from ProductGroup")
     suspend fun getAllProductGroups(): List<ProductGroup>

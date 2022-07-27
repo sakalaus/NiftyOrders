@@ -16,7 +16,8 @@ data class Colors(
     val hintColor: Color,
     val accentColor: Color,
     val accentDimmedColor: Color,
-    val notificationColor: Color
+    val notificationColor: Color,
+    val errorColor: Color
 )
 
 val lightPalette = Colors(
@@ -33,5 +34,6 @@ val lightPalette = Colors(
     hintColor = Color(0xFFA0978C),
     accentColor = Color(0xFFF46803),
     accentDimmedColor = Color(0xFFFAB27F),
-    notificationColor = Color.Red
+    notificationColor = Color.Red,
+    errorColor = Color(0xFFCF6679)
 )

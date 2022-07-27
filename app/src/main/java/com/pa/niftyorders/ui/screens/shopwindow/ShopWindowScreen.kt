@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.ArrowForward
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -42,7 +43,9 @@ fun ShopWindowScreen(
     onQuantityDecrease: (Long?) -> Unit,
     onFeaturedProductGroupSelect: (Long) -> Unit,
     onAddToCart: (CartLine) -> Unit,
-    onDismissAddToCart: () -> Unit
+    onDismissAddToCart: () -> Unit,
+    onSearchFieldValueChange: (String) -> Unit,
+    onSearchFieldFocusChange: (FocusState) -> Unit
 ) {
 
     val scaffoldState = rememberScaffoldState()
@@ -65,6 +68,11 @@ fun ShopWindowScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         ProductsDisplay(
+            showSearchField = uiState.showSearchField,
+            showHorizontalHeaders = uiState.showHorizontalHeaders,
+            showTopProducts = uiState.showTopProducts,
+            showPromotions = uiState.showPromotions,
+            searchField = uiState.searchField,
             topProducts = uiState.topProducts,
             productsInFeaturedGroup = uiState.productsInFeaturedGroup,
             promotions = uiState.promotions,
@@ -72,7 +80,9 @@ fun ShopWindowScreen(
             selectedFeaturedProductGroupId = uiState.selectedFeaturedProductGroupId,
             doScroll = doScroll,
             onProductInDisplaySelect = onProductClick,
-            onFeaturedProductGroupSelect = onFeaturedProductGroupSelect
+            onFeaturedProductGroupSelect = onFeaturedProductGroupSelect,
+            onSearchFieldValueChange = onSearchFieldValueChange,
+            onSearchFieldFocusChange = onSearchFieldFocusChange
         )
     }
 
@@ -87,7 +97,9 @@ fun ShopWindowScreenWithCartScreen(
     onQuantityDecrease: (Long?) -> Unit,
     onFeaturedProductGroupSelect: (Long) -> Unit,
     onAddToCart: (CartLine) -> Unit,
-    onDismissAddToCart: () -> Unit
+    onDismissAddToCart: () -> Unit,
+    onSearchFieldValueChange: (String) -> Unit,
+    onSearchFieldFocusChange: (FocusState) -> Unit
 ) {
     if (uiState.isAddToCartDialogOpen) {
         AddToCartDialog(
@@ -107,6 +119,11 @@ fun ShopWindowScreenWithCartScreen(
             modifier = Modifier.fillMaxWidth(0.7f)
         ) {
             ProductsDisplay(
+                showSearchField = uiState.showSearchField,
+                showHorizontalHeaders = uiState.showHorizontalHeaders,
+                showTopProducts = uiState.showTopProducts,
+                showPromotions = uiState.showPromotions,
+                searchField = uiState.searchField,
                 topProducts = uiState.topProducts,
                 productsInFeaturedGroup = uiState.productsInFeaturedGroup,
                 promotions = uiState.promotions,
@@ -114,7 +131,9 @@ fun ShopWindowScreenWithCartScreen(
                 selectedFeaturedProductGroupId = uiState.selectedFeaturedProductGroupId,
                 doScroll = doScroll,
                 onProductInDisplaySelect = onProductClick,
-                onFeaturedProductGroupSelect = onFeaturedProductGroupSelect
+                onFeaturedProductGroupSelect = onFeaturedProductGroupSelect,
+                onSearchFieldValueChange = onSearchFieldValueChange,
+                onSearchFieldFocusChange = onSearchFieldFocusChange
             )
         }
         Spacer(modifier = Modifier.width(8.dp))

@@ -4,6 +4,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.focus.FocusState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pa.niftyorders.domain.model.entities.CartLine
@@ -26,7 +27,7 @@ class ShopWindowViewModel @Inject constructor(
             val topProducts = async { orderUseCases.getTopProducts() }
             val promotions = async { orderUseCases.getPromotions() }
             val featuredProductGroups = async { orderUseCases.getFeaturedProductGroups() }
-            val deferredCartData  = async { refreshCartData(orderUseCases)  }
+            val deferredCartData = async { refreshCartData(orderUseCases) }
 
             uiState = uiState.copy(
                 topProducts = topProducts.await(),
@@ -34,7 +35,7 @@ class ShopWindowViewModel @Inject constructor(
                 products = topProducts.await(),
                 promotions = promotions.await(),
                 productsInCart = deferredCartData.await().first,
-                cartTotal  = deferredCartData.await().second
+                cartTotal = deferredCartData.await().second
             )
 
             if (uiState.featuredProductGroups.isNotEmpty() && uiState.selectedFeaturedProductGroupId == null) {
@@ -83,7 +84,30 @@ class ShopWindowViewModel @Inject constructor(
             )
             ShopWindowEvent.DemoDataCreation -> createDemoData()
             ShopWindowEvent.AddToCartDismiss -> dismissAddToCartDialog()
+            is ShopWindowEvent.SearchFieldValueChange -> {
+                searchTextChanged(text = event.value)
+            }
+            is ShopWindowEvent.SearchFieldFocusChanged -> {
+                searchFocusChanged(focusState = event.focusState)
+            }
         }
+    }
+
+    private fun searchTextChanged(text: String) {
+        uiState = uiState.copy(searchField = uiState.searchField.copy(text = text))
+        val searchIsNotActivated = uiState.searchField.text.isEmpty()
+        uiState = uiState.copy(showHorizontalHeaders = searchIsNotActivated)
+        uiState = uiState.copy(showTopProducts = searchIsNotActivated)
+        uiState = uiState.copy(showPromotions = searchIsNotActivated)
+        viewModelScope.launch {
+            val productsInFeaturedGroup = orderUseCases.getProductsInGroup(uiState.selectedFeaturedProductGroupId!!, uiState.searchField.text)
+            uiState = uiState.copy(productsInFeaturedGroup = productsInFeaturedGroup)
+        }
+    }
+
+    private fun searchFocusChanged(focusState: FocusState) {
+        uiState =
+            uiState.copy(searchField = uiState.searchField.copy(isHintVisible = uiState.searchField.text.isBlank() && !focusState.isFocused))
     }
 
     private fun selectFeaturedProductGroup(productGroupId: Long) {
@@ -91,7 +115,7 @@ class ShopWindowViewModel @Inject constructor(
             uiState = uiState.copy(selectedFeaturedProductGroupId = productGroupId)
             uiState.selectedFeaturedProductGroupId?.let {
                 uiState =
-                    uiState.copy(productsInFeaturedGroup = orderUseCases.getProductsInGroup(it))
+                    uiState.copy(productsInFeaturedGroup = orderUseCases.getProductsInGroup(it, uiState.searchField.text))
             }
         }
     }
