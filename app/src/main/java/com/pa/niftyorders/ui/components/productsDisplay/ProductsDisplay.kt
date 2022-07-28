@@ -1,5 +1,8 @@
 package com.pa.niftyorders.ui.components.productsDisplay
 
+import android.view.animation.BounceInterpolator
+import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material.icons.Icons
@@ -84,11 +87,13 @@ fun ProductsDisplay(
                 .fillMaxSize()
                 .padding(horizontal = 8.dp)
         ) {
-            if (showTopProducts) {
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-                item {
+            item {
+                AnimatedVisibility(
+                    visible = showTopProducts,
+                    enter = expandVertically(),
+                    exit = shrinkVertically()
+                ) {
+                    Spacer(modifier = Modifier.height(2.dp))
                     if (showHorizontalHeaders) {
                         HorizontalSectionHeader(
                             caption = stringResource(R.string.top_products),
@@ -113,11 +118,13 @@ fun ProductsDisplay(
                     }
                 }
             }
-            if (showPromotions) {
-                item {
+            item {
+                AnimatedVisibility(
+                    visible = showPromotions,
+                    enter = expandVertically(),
+                    exit = shrinkVertically()
+                ) {
                     Spacer(modifier = Modifier.height(2.dp))
-                }
-                item {
                     if (showHorizontalHeaders) {
                         HorizontalSectionHeader(
                             caption = stringResource(R.string.promotions),
@@ -142,6 +149,7 @@ fun ProductsDisplay(
                     }
                 }
             }
+
             item {
                 Spacer(modifier = Modifier.height(8.dp))
             }
