@@ -8,6 +8,8 @@ import java.math.BigDecimal
 
 interface Repository {
     suspend fun getTopProducts(): List<Product>
+    suspend fun getAllProducts(): List<Product>
+    suspend fun getProducts(searchString: String): List<Product>
     suspend fun getProductsInGroup(groupId: Long, searchString: String): List<Product>
     suspend fun getFeaturedProductGroups(): List<ProductGroup>
     suspend fun getProductsInCart(): List<CartLine>

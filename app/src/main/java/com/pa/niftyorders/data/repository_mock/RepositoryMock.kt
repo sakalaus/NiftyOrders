@@ -13,6 +13,14 @@ class RepositoryMock @Inject constructor() : Repository {
         return sampleProducts
     }
 
+    override suspend fun getAllProducts(): List<Product> {
+        return sampleProducts
+    }
+
+    override suspend fun getProducts(searchString: String): List<Product> {
+        return sampleProducts
+    }
+
     override suspend fun getProductsInGroup(groupId: Long, searchString: String): List<Product> {
         return emptyList()
     }

@@ -24,6 +24,14 @@ class RepositoryImpl @Inject constructor(
         return dao.getAllProducts()
     }
 
+    override suspend fun getAllProducts(): List<Product> {
+        return dao.getAllProducts()
+    }
+
+    override suspend fun getProducts(searchString: String): List<Product> {
+        return dao.getProducts(searchString)
+    }
+
     override suspend fun getProductsInGroup(groupId: Long, searchString: String): List<Product> {
         return dao.getProductsInGroup(groupId, searchString.lowercase())
     }

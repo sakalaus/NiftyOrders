@@ -13,23 +13,26 @@ import java.math.BigDecimal
 @Dao
 interface ProductDAO {
 
-    @Query("Select * from Product")
+    @Query("SELECT * FROM Product")
     suspend fun getAllProducts(): List<Product>
 
-    @Query("Select * from Product where groupId = :groupId " +
+    @Query("SELECT * from Product WHERE groupId = :groupId " +
             "AND LOWER(name) LIKE '%' || :searchString || '%'")
     suspend fun getProductsInGroup(groupId: Long, searchString: String): List<Product>
 
-    @Query("Select * from ProductGroup")
+    @Query("SELECT * FROM Product WHERE LOWER(name) LIKE '%' || :searchString || '%'")
+    suspend fun getProducts(searchString: String): List<Product>
+    
+    @Query("SELECT * from ProductGroup")
     suspend fun getAllProductGroups(): List<ProductGroup>
 
-    @Query("Select * from ProductGroup where featured")
+    @Query("SELECT * from ProductGroup where featured")
     suspend fun getFeaturedProductGroups(): List<ProductGroup>
 
-    @Query("Select * from Promotion")
+    @Query("SELECT * from Promotion")
     suspend fun getAllPromotions(): List<Promotion>
 
-    @Query("Select * from CartLine")
+    @Query("SELECT * from CartLine")
     suspend fun getCart(): List<CartLine>
 
     @Query("Delete from Product")

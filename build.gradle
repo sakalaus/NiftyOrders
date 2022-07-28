@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        compose_version = '1.1.1'
+        compose_version = '1.2.0'
         room_version = "2.4.2"
         xkotlin_version = "1.5.10"
     }
